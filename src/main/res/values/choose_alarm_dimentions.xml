@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="choose_alarm_text_size">16sp</dimen>
+
+    <dimen name="choose_alarm_btn_top_margin">10dp</dimen>
+    <dimen name="choose_alarm_btn_left_margin">10dp</dimen>
+    <dimen name="choose_alarm_btn_right_margin">10dp</dimen>
+
+    <dimen name="choose_alarm_tv_top_margin">20dp</dimen>
+
+    <dimen name="choose_alarm_btn_stroke_stable">2dp</dimen>
+    <dimen name="choose_alarm_btn_stroke_pressed">4dp</dimen>
+    <dimen name="choose_alarm_btn_radius">20dp</dimen>
+
+    <dimen name="choose_alarm_ll_np_top_margin">25dp</dimen>
+    <dimen name="choose_alarm_ll_np_max_width">250dp</dimen>
+    <dimen name="choose_alarm_ll_np_max_height">150dp</dimen>
+
+    <dimen name="choose_alarm_np_margin_right">30dp</dimen>
+    <dimen name="choose_alarm_np_margin_left">30dp</dimen>
+    <dimen name="choose_alarm_np_weight">1</dimen>
+
+    <dimen name="choose_alarm_tv_text_size">15sp</dimen>
+    <dimen name="choose_alarm_layouts_margin_top">30dp</dimen>
+    <dimen name="choose_alarm_layouts_margin_left">20dp</dimen>
+    <dimen name="choose_alarm_layouts_margin_right">20dp</dimen>
+    <dimen name="choose_alarm_music_btn_height">25dp</dimen>
+    <dimen name="choose_alarm_clickable_padding">5dp</dimen>
+
+    <dimen name="choose_alarm_bottom_margin">30dp</dimen>
+
+</resources>

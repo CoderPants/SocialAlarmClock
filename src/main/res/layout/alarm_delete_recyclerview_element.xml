@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/recycler_view_elem_padding">
+
+    <LinearLayout
+        android:id="@+id/ll_delete_alarm_clock_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="@dimen/recycler_view_elem_margin_bottom_for_line">
+
+        <TextView
+            android:id="@+id/delete_alarm_clock_chosen_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|start"
+            android:fontFamily="@string/text_style"
+            android:textSize="@dimen/alarm_widget_text_size_for_time"
+            android:textAlignment="center"
+            android:textColor="@color/black95" />
+
+
+        <TextView
+            android:id="@+id/delete_alarm_clock_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|start"
+            android:fontFamily="@string/text_style"
+            android:textSize="@dimen/alarm_widget_text_size_for_name"
+            android:textAlignment="center"
+            android:textColor="@color/black95"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/delete_alarm_clock_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|end"
+        android:background="@drawable/delete_alarm_clock_tv_background"
+        android:text="X"/>
+
+    <View
+        android:id="@+id/bottom_border"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/recycler_view_line_height"
+        android:background="@color/black95"
+        android:layout_gravity="bottom" />
+
+</FrameLayout>

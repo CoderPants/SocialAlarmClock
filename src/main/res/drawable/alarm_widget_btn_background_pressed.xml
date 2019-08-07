@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+
+    <solid android:color="@color/white"/>
+
+    <stroke android:width="@dimen/add_alarm_btn_stroke"
+        android:color = "@color/black95"/>
+
+    <size
+        android:height="@dimen/add_alarm_btn_max_height"
+        android:width="@dimen/add_alarm_btn_max_width"/>
+
+</shape>

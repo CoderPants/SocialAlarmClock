@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Change Linear-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_alarm_clock_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/alarm_widget_padding"
+    android:background="@color/white80">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_alarm_clocks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <ImageButton
+        android:id="@+id/ib_add_alarm_clock_btn"
+        android:layout_width="@dimen/add_alarm_btn_max_width"
+        android:layout_height="@dimen/add_alarm_btn_max_height"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/add_alarm_btn_margin_left"
+        android:background="@drawable/alarm_widget_btn_background"
+        android:src = "@drawable/add_alarm_icon_new"
+        android:scaleType="fitXY"
+        />
+
+</RelativeLayout>

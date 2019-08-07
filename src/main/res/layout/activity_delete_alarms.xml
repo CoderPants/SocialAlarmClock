@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.donteco.alarmClock.DeleteAlarmsActivity"
+    android:background="@color/white"
+    android:padding = "@dimen/delete_alarm_padding">
+
+    <!--CHANGE ALL IDS!!!!-->
+    <Button
+        android:id="@+id/delete_alarm_cancel_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="X"
+        android:layout_marginStart="@dimen/choose_alarm_btn_left_margin"
+        android:layout_marginTop="@dimen/choose_alarm_btn_top_margin"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/choose_alarm_btn_background"
+        />
+
+    <TextView
+        android:id="@+id/tv_delete_alarm_tv_add_alarm_clock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_alarm"
+        android:textSize="@dimen/choose_alarm_text_size"
+        android:layout_marginTop="@dimen/choose_alarm_tv_top_margin"
+        android:fontFamily="@string/text_style"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        />
+
+    <Button
+        android:id="@+id/delete_alarm_accept_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="V"
+        android:layout_marginEnd="@dimen/choose_alarm_btn_right_margin"
+        android:layout_marginTop="@dimen/choose_alarm_btn_top_margin"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/choose_alarm_btn_background"
+        />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_delete_alarm_clocks"
+        android:layout_marginTop="@dimen/choose_alarm_ll_np_top_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/delete_alarm_cancel_btn">
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+</RelativeLayout>

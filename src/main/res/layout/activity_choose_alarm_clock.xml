@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.donteco.alarmClock.ChooseAlarmClockActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+        <Button
+            android:id="@+id/choose_alarm_cancel_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="X"
+            android:layout_marginStart="@dimen/choose_alarm_btn_left_margin"
+            android:layout_marginTop="@dimen/choose_alarm_btn_top_margin"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/choose_alarm_btn_background"
+            />
+
+        <TextView
+            android:id="@+id/tv_choose_alarm_tv_add_alarm_clock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_alarm"
+            android:textSize="@dimen/choose_alarm_text_size"
+            android:layout_marginTop="@dimen/choose_alarm_tv_top_margin"
+            android:fontFamily="@string/text_style"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            />
+
+        <Button
+            android:id="@+id/choose_alarm_accept_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="V"
+            android:layout_marginEnd="@dimen/choose_alarm_btn_right_margin"
+            android:layout_marginTop="@dimen/choose_alarm_btn_top_margin"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/choose_alarm_btn_background"
+            />
+
+        <LinearLayout
+            android:id="@+id/ll_choose_alarm_np_layout"
+            android:layout_width="@dimen/choose_alarm_ll_np_max_width"
+            android:layout_height="@dimen/choose_alarm_ll_np_max_height"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/choose_alarm_ll_np_top_margin"
+            android:layout_below ="@+id/choose_alarm_cancel_btn"
+            >
+
+            <NumberPicker
+                android:id="@+id/np_choose_hours"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="@dimen/choose_alarm_np_weight"
+                android:layout_marginEnd="@dimen/choose_alarm_np_margin_right"
+                >
+            </NumberPicker>
+
+            <NumberPicker
+                android:id="@+id/np_choose_minutes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="@dimen/choose_alarm_np_weight"
+                android:layout_marginStart="@dimen/choose_alarm_np_margin_left"
+                >
+            </NumberPicker>
+
+        </LinearLayout>
+
+
+        <!--For 12 hours format-->
+        <LinearLayout
+            android:id="@+id/ll_choose_alarm_am_pm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/ll_choose_alarm_np_layout"
+            android:layout_marginTop="@dimen/choose_alarm_layouts_margin_top"
+            android:layout_marginStart="@dimen/choose_alarm_layouts_margin_left"
+            android:layout_marginEnd="@dimen/choose_alarm_layouts_margin_right"
+            android:layout_centerHorizontal="true"
+            android:visibility="invisible"
+            >
+
+            <TextView
+                android:id="@+id/tv_choose_alarm_am_pm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/am_pm"
+                android:layout_weight="1"
+                android:layout_marginEnd="@dimen/choose_alarm_layouts_margin_right"
+                android:textColor="@color/black"
+                />
+
+            <Spinner
+                android:id="@+id/spinner_choose_alarm_am_pm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/part_of_day_list">
+
+            </Spinner>
+        </LinearLayout>
+
+        <View
+            android:id="@+id/bottom_border_alarm_am_pm"
+            android:layout_below="@+id/ll_choose_alarm_am_pm"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/recycler_view_line_height"
+            android:background="@color/black95"
+            android:layout_gravity="bottom"
+            android:visibility="invisible"/>
+
+        <!--Days choose-->
+        <LinearLayout
+            android:id="@+id/ll_choose_alarm_days_of_the_week_choose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/bottom_border_alarm_am_pm"
+            android:layout_marginTop="@dimen/choose_alarm_layouts_margin_top"
+            android:layout_marginStart="@dimen/choose_alarm_layouts_margin_left"
+            android:layout_marginEnd="@dimen/choose_alarm_layouts_margin_right"
+            android:layout_centerHorizontal="true"
+            >
+
+            <TextView
+                android:id="@+id/tv_choose_alarm_day_of_week"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/day_of_the_week"
+                android:layout_weight="1"
+
+                android:textColor="@color/black"
+                />
+
+            <TextView
+                android:id="@+id/tv_choose_alarm_day_of_week_dialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight = "1"
+                android:textColor="@color/black85"
+                android:text="@string/choose_day_of_week"
+                android:textAlignment="textEnd"
+                android:padding = "@dimen/choose_alarm_clickable_padding"
+                />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/bottom_border_alarm_days_of_the_week"
+            android:layout_below="@+id/ll_choose_alarm_days_of_the_week_choose"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/recycler_view_line_height"
+            android:background="@color/black95"
+            android:layout_gravity="bottom" />
+
+
+        <!--Music choose-->
+        <LinearLayout
+            android:id="@+id/ll_choose_alarm_music"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/bottom_border_alarm_days_of_the_week"
+            android:layout_marginTop="@dimen/choose_alarm_layouts_margin_top"
+            android:layout_marginStart="@dimen/choose_alarm_layouts_margin_left"
+            android:layout_marginEnd="@dimen/choose_alarm_layouts_margin_right"
+            android:layout_centerHorizontal="true"
+            >
+
+            <TextView
+                android:id="@+id/tv_choose_alarm_music"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/alarm_music"
+                android:layout_weight="1"
+                android:layout_marginEnd="@dimen/choose_alarm_layouts_margin_right"
+                android:textColor="@color/black"
+                />
+
+            <TextView
+                android:id="@+id/btn_choose_alarm_music"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight = "1"
+                android:layout_marginStart="@dimen/choose_alarm_layouts_margin_left"
+                android:padding = "@dimen/choose_alarm_clickable_padding"
+                android:textColor="@color/black85"
+                android:text="@string/alarm_music_choose"
+                android:textAlignment="textEnd"/>
+       <!--     <Button
+                android:id="@+id/choose_music"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/choose_alarm_layouts_margin_top"
+                android:background="@color/white"
+                android:text="@string/alarm_music_choose"
+                android:textSize="@dimen/choose_alarm_tv_text_size"
+                android:textAllCaps="false"
+                android:textColor="@color/black85"
+                android:padding = "@dimen/choose_alarm_clickable_padding"/>-->
+        </LinearLayout>
+
+        <View
+            android:id="@+id/bottom_border_alarm_music"
+            android:layout_below="@+id/ll_choose_alarm_music"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/recycler_view_line_height"
+            android:background="@color/black95"
+            android:layout_gravity="bottom" />
+
+        <!--Vibration-->
+        <LinearLayout
+            android:id="@+id/ll_choose_alarm_vibration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/bottom_border_alarm_music"
+            android:layout_marginTop="@dimen/choose_alarm_layouts_margin_top"
+            android:layout_marginStart="@dimen/choose_alarm_layouts_margin_left"
+            android:layout_marginEnd="@dimen/choose_alarm_layouts_margin_right"
+            android:layout_centerHorizontal="true"
+            >
+
+            <TextView
+                android:id="@+id/tv_choose_alarm_vibration"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/alarm_vibration"
+                android:layout_weight="1"
+                android:layout_marginEnd="@dimen/choose_alarm_layouts_margin_right"
+                android:textColor="@color/black"
+                />
+
+            <Switch
+                android:id="@+id/set_vibration_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:theme="@style/SwitchTheme"
+                android:padding = "@dimen/choose_alarm_clickable_padding"/>
+        </LinearLayout>
+
+        <View
+            android:id="@+id/bottom_alarm_vibration"
+            android:layout_below="@+id/ll_choose_alarm_vibration"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/recycler_view_line_height"
+            android:background="@color/black95"
+            android:layout_gravity="bottom" />
+
+        <!--Alarm name-->
+        <LinearLayout
+            android:id="@+id/ll_choose_alarm_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/bottom_alarm_vibration"
+            android:layout_marginTop="@dimen/choose_alarm_layouts_margin_top"
+            android:layout_marginStart="@dimen/choose_alarm_layouts_margin_left"
+            android:layout_marginEnd="@dimen/choose_alarm_layouts_margin_right"
+            android:layout_centerHorizontal="true"
+            >
+
+            <TextView
+                android:id="@+id/tv_choose_alarm_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/alarm_name"
+                android:layout_weight="1"
+                android:layout_marginEnd="@dimen/choose_alarm_layouts_margin_right"
+                android:textColor="@color/black"
+                />
+
+            <!--Dummy layout, for preventing gaining focus on edit texts-->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/et_alarm_clock_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/alarm_description"
+                android:textAlignment="textEnd"
+                android:textSize="@dimen/choose_alarm_tv_text_size"
+                android:textColor="@color/black85"
+                android:background="@color/white"
+                android:padding = "@dimen/choose_alarm_clickable_padding"
+                android:nextFocusUp="@+id/et_alarm_clock_name"
+                android:nextFocusLeft="@+id/et_alarm_clock_name"
+                android:selectAllOnFocus = "true"
+                />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/bottom_border_alarm_name"
+            android:layout_below="@+id/ll_choose_alarm_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/recycler_view_line_height"
+            android:background="@color/black95"
+            android:layout_gravity="bottom" />
+
+        <!--Alarm duration-->
+        <LinearLayout
+            android:id="@+id/ll_choose_alarm_duration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/bottom_border_alarm_name"
+            android:layout_marginTop="@dimen/choose_alarm_layouts_margin_top"
+            android:layout_marginStart="@dimen/choose_alarm_layouts_margin_left"
+            android:layout_marginEnd="@dimen/choose_alarm_layouts_margin_right"
+            android:layout_marginBottom="@dimen/choose_alarm_bottom_margin"
+            android:layout_centerHorizontal="true"
+            >
+
+            <TextView
+                android:id="@+id/tv_choose_alarm_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/alarm_duration"
+                android:layout_weight="1"
+                android:layout_marginEnd="@dimen/choose_alarm_layouts_margin_right"
+                android:textColor="@color/black"
+                />
+
+            <!--Dummy layout, for preventing gaining focus on edit texts-->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_alarm_clock_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/alarm_duration_standart"
+                android:textAlignment="textEnd"
+                android:textSize="@dimen/choose_alarm_tv_text_size"
+                android:textColor="@color/black85"
+                android:background="@color/white"
+                android:padding = "@dimen/choose_alarm_clickable_padding"
+                android:nextFocusUp="@+id/tv_alarm_clock_duration"
+                android:nextFocusLeft="@+id/tv_alarm_clock_duration"/>
+        </LinearLayout>
+    </RelativeLayout>
+</ScrollView>

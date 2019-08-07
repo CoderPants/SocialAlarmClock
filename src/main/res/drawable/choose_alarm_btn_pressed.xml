@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <stroke android:width="@dimen/choose_alarm_btn_stroke_pressed"
+        android:color = "@color/black"/>
+    <corners android:radius="@dimen/choose_alarm_btn_radius"/>
+
+    <solid android:color="@color/white80" />
+
+</shape>

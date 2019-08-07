@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name = "white80">#80FFFFFF</color>
+    <color name="black95">#95000000</color>
+    <color name="black85">#85000000</color>
+    <color name="black">#000</color>
+
+    <color name="blue_for_switch">#4290f5</color>
+    <color name="gray_for_switch">#a1aebf</color>
+</resources>
+

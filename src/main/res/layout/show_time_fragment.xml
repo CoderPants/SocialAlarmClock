@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id ="@+id/rl_show_time_fragment_main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white80"
+    android:gravity="center">
+
+
+    <LinearLayout
+        android:id="@+id/ll_layout_for_time_city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="@dimen/time_widget_tv_padding"
+            android:text="@string/current_city_string"
+            android:textColor="@color/black95"
+            android:textAlignment="center"
+            android:textSize="@dimen/time_widget_tv_current_city_text_size"
+            android:fontFamily="@string/text_style"
+            />
+        <TextView
+            android:id="@+id/show_time_tv_current_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="@dimen/time_widget_tv_padding"
+            android:layout_marginTop="@dimen/time_widget_tv_margin_top"
+            android:textColor="@color/black95"
+            android:textAlignment="center"
+            android:textSize="@dimen/time_widget_tv_current_time_text_size"
+            android:fontFamily="@string/text_style"
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>
