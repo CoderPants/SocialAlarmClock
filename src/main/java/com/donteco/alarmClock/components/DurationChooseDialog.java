@@ -21,7 +21,6 @@ public class DurationChooseDialog extends DialogFragment {
 
     private DurationChooseDialogListener listener;
 
-
     public DurationChooseDialog(){}
 
     //Mb, it's illegal
@@ -48,33 +47,16 @@ public class DurationChooseDialog extends DialogFragment {
         //Kinda cheat
         final String [] userChoice =  new String[]{"" ,"", "", "", "", ""};
 
-        DialogInterface.OnClickListener acceptBtnListener = new DialogInterface.OnClickListener()
-        {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int id)
-            {
-                listener.onDurationDialogPositiveClick(userChoice);
-            }
-        };
+        DialogInterface.OnClickListener acceptBtnListener = (dialogInterface, id) -> listener.onDurationDialogPositiveClick(userChoice);
 
-        DialogInterface.OnClickListener cancelBtnListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.cancel();
-            }
-        };
+        DialogInterface.OnClickListener cancelBtnListener = (dialogInterface, i) -> dialogInterface.cancel();
 
-        DialogInterface.OnClickListener singleChoiceListener = new DialogInterface.OnClickListener()
-        {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int item)
-            {
-                for (int i = 0; i < userChoice.length; i++)
-                    if(!userChoice[i].equals(""))
-                        userChoice[i] = "";
+        DialogInterface.OnClickListener singleChoiceListener = (dialogInterface, item) -> {
+            for (int i = 0; i < userChoice.length; i++)
+                if(!userChoice[i].equals(""))
+                    userChoice[i] = "";
 
-                   userChoice[item] = duration[item];
-            }
+               userChoice[item] = duration[item];
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

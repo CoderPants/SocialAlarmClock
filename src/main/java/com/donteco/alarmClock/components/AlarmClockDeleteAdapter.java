@@ -3,6 +3,7 @@ package com.donteco.alarmClock.components;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,6 +27,7 @@ public class AlarmClockDeleteAdapter extends RecyclerView.Adapter<AlarmClockDele
     public List<AlarmClock> getAlarmClocks() {
         return alarmClocks;
     }
+
 
     @NonNull
     @Override
@@ -51,14 +53,14 @@ public class AlarmClockDeleteAdapter extends RecyclerView.Adapter<AlarmClockDele
     {
         private TextView alarmTime;
         private TextView alarmName;
-        private TextView deleteAlarmBtn;
+        private ImageView deleteAlarmBtn;
 
         public AlarmClockDeleteViewHolder(@NonNull View itemView) {
             super(itemView);
 
             alarmTime = itemView.findViewById(R.id.delete_alarm_clock_chosen_time);
             alarmName = itemView.findViewById(R.id.delete_alarm_clock_name);
-            deleteAlarmBtn = itemView.findViewById(R.id.delete_alarm_clock_tv);
+            deleteAlarmBtn = itemView.findViewById(R.id.delete_alarm_clock_iv);
         }
 
         private void bind(final AlarmClock alarmClock)
@@ -70,14 +72,9 @@ public class AlarmClockDeleteAdapter extends RecyclerView.Adapter<AlarmClockDele
 
             alarmTime.setText(time);
             alarmName.setText(alarmClock.getDescription());
-            deleteAlarmBtn.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View view)
-                {
-                    alarmClocks.remove(alarmClock);
-                    notifyDataSetChanged();
-                }
+            deleteAlarmBtn.setOnClickListener(view -> {
+                alarmClocks.remove(alarmClock);
+                notifyDataSetChanged();
             });
         }
 

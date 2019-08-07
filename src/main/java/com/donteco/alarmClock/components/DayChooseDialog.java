@@ -53,29 +53,11 @@ public class DayChooseDialog extends DialogFragment {
         final boolean[] checked = new boolean[]{false, false, false, false, false, false, false};
 
 
-        DialogInterface.OnMultiChoiceClickListener multiChoiceClickListener = new DialogInterface.OnMultiChoiceClickListener()
-        {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int what, boolean isChecked) {
-                checked[what] = isChecked;
-            }
-        };
+        DialogInterface.OnMultiChoiceClickListener multiChoiceClickListener = (dialogInterface, what, isChecked) -> checked[what] = isChecked;
 
-        DialogInterface.OnClickListener acceptBtnListener = new DialogInterface.OnClickListener()
-        {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int id)
-            {
-                listener.onDaysDialogPositiveClick(checked);
-            }
-        };
+        DialogInterface.OnClickListener acceptBtnListener = (dialogInterface, id) -> listener.onDaysDialogPositiveClick(checked);
 
-        DialogInterface.OnClickListener cancelBtnListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.cancel();
-            }
-        };
+        DialogInterface.OnClickListener cancelBtnListener = (dialogInterface, i) -> dialogInterface.cancel();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 

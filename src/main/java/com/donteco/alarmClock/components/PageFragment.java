@@ -23,7 +23,11 @@ import com.donteco.alarmClock.DeleteAlarmsActivity;
 import com.donteco.alarmClock.R;
 import com.donteco.alarmClock.alarm.AlarmClock;
 import com.donteco.alarmClock.alarm.DayPart;
+import com.donteco.alarmClock.help.AlarmClocksStorage;
 import com.donteco.alarmClock.help.ConstantsForApp;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -189,10 +193,19 @@ public class PageFragment extends Fragment
     {
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
 
-        alarmClockAdapter = new AlarmClockAdapter(() ->
-        {
-            Intent intent = new Intent(getContext(), DeleteAlarmsActivity.class);
-            startActivityForResult(intent, ConstantsForApp.DELETE_ALARM_REQUEST);
+        alarmClockAdapter = new AlarmClockAdapter(new AlarmClockAdapter.CallBack() {
+            @Override
+            public void onLongPress() {
+                Intent intent = new Intent(getContext(), DeleteAlarmsActivity.class);
+                startActivityForResult(intent, ConstantsForApp.DELETE_ALARM_REQUEST);
+            }
+
+            @Override
+            public void onPress(int position) {
+                Intent addAlarmIntent = new Intent(getActivity(), ChooseAlarmClockActivity.class);
+                addAlarmIntent.putExtra("Alarm clock position", position);
+                startActivityForResult(addAlarmIntent, ConstantsForApp.ALARM_INFO_REQUEST);
+            }
         });
 
         recyclerView.setAdapter(alarmClockAdapter);
@@ -218,7 +231,15 @@ public class PageFragment extends Fragment
                 break;
             case ConstantsForApp.DELETE_ALARM_REQUEST:
                 if(resultCode == RESULT_OK && data != null)
-                    //setAlarmInfo(data);
+                {
+                    try {
+                        alarmClockAdapter.addItems(AlarmClocksStorage.getAlarmClocks());
+                    }
+                    catch (JSONException e){
+                        Log.e(ConstantsForApp.LOG_TAG, "Exception in onActivityResult in PageFragment, caused by parsing json format");
+                    }
+
+                }
                 break;
         }
 
@@ -272,13 +293,7 @@ public class PageFragment extends Fragment
         @Override
         public void run()
         {
-            activity.runOnUiThread(new Runnable()
-            {
-                @Override
-                public void run() {
-                    updateTime();
-                }
-            });
+            activity.runOnUiThread(() -> updateTime());
         }
 
         //Need to find better way to handle it

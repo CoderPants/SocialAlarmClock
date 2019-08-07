@@ -24,6 +24,7 @@ import java.util.List;
 public class DeleteAlarmsActivity extends AppCompatActivity {
 
     private List<AlarmClock> curAlarmList;
+    private AlarmClockDeleteAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +45,16 @@ public class DeleteAlarmsActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.rv_delete_alarm_clocks);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new AlarmClockDeleteAdapter(curAlarmList));
-
+        adapter = new AlarmClockDeleteAdapter(curAlarmList);
+        recyclerView.setAdapter(adapter);
     }
 
     private void acceptBtnLogic(Button acceptDeletingBtn)
     {
         acceptDeletingBtn.setOnClickListener(view -> {
+
+            AlarmClocksStorage.setAlarmClocks(adapter.getAlarmClocks());
+
             Intent acceptIntent = new Intent();
             setResult(RESULT_OK, acceptIntent);
             finish();

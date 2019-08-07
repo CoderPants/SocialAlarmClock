@@ -11,6 +11,7 @@ public class AlarmClock
     private int minutes;
     private boolean[] chosenDays;
     private String alarmClockMusicLocation;
+    private String alarmMusicName;
     private boolean vibration;
     private String description;
     private int duration;

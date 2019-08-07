@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
@@ -26,11 +27,15 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.donteco.alarmClock.alarm.AlarmClock;
 import com.donteco.alarmClock.alarm.DayPart;
 import com.donteco.alarmClock.components.DayChooseDialog;
 import com.donteco.alarmClock.components.DurationChooseDialog;
 import com.donteco.alarmClock.help.ActivityHelper;
+import com.donteco.alarmClock.help.AlarmClocksStorage;
 import com.donteco.alarmClock.help.ConstantsForApp;
+
+import org.json.JSONException;
 
 import java.util.Calendar;
 
@@ -72,10 +77,31 @@ public class ChooseAlarmClockActivity extends AppCompatActivity
         Button cancelBtn = findViewById(R.id.choose_alarm_cancel_btn);
         Button acceptBtn = findViewById(R.id.choose_alarm_accept_btn);
 
+        amPmSpinner = findViewById(R.id.spinner_choose_alarm_am_pm);
+
+        pickerForHours = findViewById(R.id.np_choose_hours);
+        pickerForMinutes = findViewById(R.id.np_choose_minutes);
+
+        daysChoose = findViewById(R.id.tv_choose_alarm_day_of_week_dialog);
+        musicButton = findViewById(R.id.btn_choose_alarm_music);
+        vibrationSwitch = findViewById(R.id.set_vibration_switch);
+        alarmName = findViewById(R.id.et_alarm_clock_name);
+        alarmDuration = findViewById(R.id.tv_alarm_clock_duration);
+
         acceptBtnLogic(acceptBtn);
         cancelBtnLogic(cancelBtn);
 
-        amPmSpinner = findViewById(R.id.spinner_choose_alarm_am_pm);
+        Intent alarmClockInfo = getIntent();
+        int alarmClockPosition = alarmClockInfo.getIntExtra("Alarm clock position", Integer.MAX_VALUE);
+
+        if(alarmClockPosition == Integer.MAX_VALUE)
+            logicForAddingAlarmClock();
+        else
+            logicForChangingAlarmClock(alarmClockPosition);
+
+        chooseDaysLogic();
+        chooseSongLogic();
+        chooseDurationLogic();
 
         Calendar curTime = Calendar.getInstance();
         int hours = curTime.get(Calendar.HOUR);
@@ -87,7 +113,7 @@ public class ChooseAlarmClockActivity extends AppCompatActivity
             amPmSpinner.setSelection(DayPart.PM.ordinal());
         }
         else
-            amPmSpinner.setSelection(DayPart.PM.ordinal());
+            amPmSpinner.setSelection(DayPart.AM.ordinal());
 
         int maxHours = 23;
         int minHours = 0;
@@ -102,21 +128,44 @@ public class ChooseAlarmClockActivity extends AppCompatActivity
             bottomLine.setVisibility(View.VISIBLE);
         }
 
-        pickerForHours = findViewById(R.id.np_choose_hours);
-        pickerForMinutes = findViewById(R.id.np_choose_minutes);
         setNumberPickers(maxHours, minHours, hours, minutes);
+    }
 
-        daysChoose = findViewById(R.id.tv_choose_alarm_day_of_week_dialog);
-        chooseDaysLogic();
+    private void logicForChangingAlarmClock(int alarmPosition)
+    {
+        AlarmClock curAlarmClock;
+        try
+        {
+            curAlarmClock = AlarmClocksStorage.getAlarmClocks().get(alarmPosition);
+            pickerForHours.setValue(curAlarmClock.getHours());
+            pickerForMinutes.setValue(curAlarmClock.getMinutes());
 
-        musicButton = findViewById(R.id.btn_choose_alarm_music);
-        chooseSongLogic();
+            if(!curAlarmClock.isIs24HourFormat())
+            {
+                if(curAlarmClock.getDayPart() == DayPart.AM)
+                    amPmSpinner.setSelection(DayPart.AM.ordinal());
+                else
+                    amPmSpinner.setSelection(DayPart.PM.ordinal());
+            }
 
-        vibrationSwitch = findViewById(R.id.set_vibration_switch);
-        alarmName = findViewById(R.id.et_alarm_clock_name);
+            onDaysDialogPositiveClick(curAlarmClock.getChosenDays());
+            setMusicTitle(curAlarmClock.getAlarmClockMusicLocation());
 
-        alarmDuration = findViewById(R.id.tv_alarm_clock_duration);
-        chooseDurationLogic();
+
+        }
+        catch (JSONException e) {
+            Log.e(ConstantsForApp.LOG_TAG, "Exception in logicForChangingAlarmClock in ChooseAlarmClockActivity, caused by parsing json format");
+        }
+    }
+
+    private void logicForAddingAlarmClock()
+    {
+
+    }
+
+    private void setTimeInfo()
+    {
+
     }
 
     private void acceptBtnLogic(final Button acceptBtn)
@@ -252,17 +301,20 @@ public class ChooseAlarmClockActivity extends AppCompatActivity
         if(cursor != null)
         {
             cursor.moveToFirst();
-            StringBuilder songTitle = new StringBuilder(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));
-
-            if(songTitle.length() > ConstantsForApp.MUSIC_NAME_LENGTH)
-            {
-                songTitle = songTitle.delete(ConstantsForApp.MUSIC_NAME_LENGTH , songTitle.length());
-                songTitle.append("...");
-            }
-
-            musicButton.setText(songTitle);
+            setMusicTitle(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));
             cursor.close();
         }
+    }
+
+    private void setMusicTitle(String songTitle)
+    {
+        if(songTitle.length() > ConstantsForApp.MUSIC_NAME_LENGTH)
+        {
+            songTitle = songTitle.substring(0 , ConstantsForApp.MUSIC_NAME_LENGTH);
+            songTitle = songTitle + "...";
+        }
+
+        musicButton.setText(songTitle);
     }
 
     private void chooseDurationLogic()

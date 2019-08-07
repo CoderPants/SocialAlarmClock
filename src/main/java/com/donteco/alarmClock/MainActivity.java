@@ -41,7 +41,8 @@ public class MainActivity extends FragmentActivity {
         viewPager.setAdapter(pagerAdapter);
 
 
-        AlarmClocksStorage alarmClocksStorage = AlarmClocksStorage.getInstance(getApplicationContext());
+        //Setting alarmClock storage
+        AlarmClocksStorage.getInstance(getApplicationContext());
 
         //Get into it!
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener()

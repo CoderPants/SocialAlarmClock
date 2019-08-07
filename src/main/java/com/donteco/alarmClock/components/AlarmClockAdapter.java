@@ -1,7 +1,5 @@
 package com.donteco.alarmClock.components;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.donteco.alarmClock.DeleteAlarmsActivity;
 import com.donteco.alarmClock.R;
 import com.donteco.alarmClock.alarm.AlarmClock;
 import com.donteco.alarmClock.help.AlarmClocksStorage;
@@ -29,11 +26,11 @@ import java.util.Locale;
 public class AlarmClockAdapter extends RecyclerView.Adapter<AlarmClockAdapter.AlarmClockViewHolder>
 {
     private List<AlarmClock> alarmClocks;
-    private Mcallback mcallback;
+    private CallBack callBack;
 
-    public AlarmClockAdapter( Mcallback mcallback) {
+    public AlarmClockAdapter( CallBack callBack) {
         alarmClocks = new ArrayList<>();
-        this.mcallback = mcallback;
+        this.callBack = callBack;
     }
 
 
@@ -130,9 +127,12 @@ public class AlarmClockAdapter extends RecyclerView.Adapter<AlarmClockAdapter.Al
         private void layoutLogic()
         {
             alarmLayout.setOnLongClickListener(view -> {
-                mcallback.onLongPress();
+                callBack.onLongPress();
                 return false;
             });
+
+            alarmLayout.setOnClickListener(view ->
+                    callBack.onPress(getAdapterPosition()));
         }
 
         private void switchLogic()
@@ -144,7 +144,9 @@ public class AlarmClockAdapter extends RecyclerView.Adapter<AlarmClockAdapter.Al
         }
     }
 
-    interface Mcallback{
+    //Interface for activity connection
+    interface CallBack {
         void onLongPress();
+        void onPress(int position);
     }
 }
