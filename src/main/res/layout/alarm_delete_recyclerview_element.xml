@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:padding="@dimen/recycler_view_elem_padding">
 
     <LinearLayout
@@ -33,14 +33,21 @@
             android:textColor="@color/black95"/>
     </LinearLayout>
 
-    <TextView
+    <ImageView
+        android:id="@+id/delete_alarm_clock_iv"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal|end"
+        android:src="@drawable/x_mark_icon"/>
+
+    <!--<TextView
         android:id="@+id/delete_alarm_clock_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|end"
         android:background="@drawable/delete_alarm_clock_tv_background"
         android:text="X"/>
-
+-->
     <View
         android:id="@+id/bottom_border"
         android:layout_width="match_parent"

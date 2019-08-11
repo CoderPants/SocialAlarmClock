@@ -10,6 +10,9 @@
         <item>PM</item>
     </string-array>
 
+    <string name="check_mark">✔</string>
+    <string name="cross_mark">✖</string>
+
     <string name="day_of_the_week">Days of the week</string>
     <string name="choose_day_of_week">No repeat ></string>
 
