@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.donteco.alarmClock.ChooseAlarmClockActivity">
+    tools:context="com.donteco.alarmClock.activities.ChooseAlarmClockActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -194,16 +194,6 @@
                 android:textColor="@color/black85"
                 android:text="@string/alarm_music_choose"
                 android:textAlignment="textEnd"/>
-       <!--     <Button
-                android:id="@+id/choose_music"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/choose_alarm_layouts_margin_top"
-                android:background="@color/white"
-                android:text="@string/alarm_music_choose"
-                android:textSize="@dimen/choose_alarm_tv_text_size"
-                android:textAllCaps="false"
-                android:textColor="@color/black85"
-                android:padding = "@dimen/choose_alarm_clickable_padding"/>-->
         </LinearLayout>
 
         <View
@@ -293,8 +283,8 @@
                 android:textAlignment="textEnd"
                 android:textSize="@dimen/choose_alarm_tv_text_size"
                 android:textColor="@color/black85"
-                android:background="@color/white"
                 android:padding = "@dimen/choose_alarm_clickable_padding"
+                android:background="@null"
                 android:nextFocusUp="@+id/et_alarm_clock_name"
                 android:nextFocusLeft="@+id/et_alarm_clock_name"
                 android:selectAllOnFocus = "true"
@@ -350,7 +340,6 @@
                 android:textAlignment="textEnd"
                 android:textSize="@dimen/choose_alarm_tv_text_size"
                 android:textColor="@color/black85"
-                android:background="@color/white"
                 android:padding = "@dimen/choose_alarm_clickable_padding"
                 android:nextFocusUp="@+id/tv_alarm_clock_duration"
                 android:nextFocusLeft="@+id/tv_alarm_clock_duration"/>

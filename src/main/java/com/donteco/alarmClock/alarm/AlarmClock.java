@@ -1,17 +1,21 @@
 package com.donteco.alarmClock.alarm;
 
-import android.net.Uri;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.os.Build;
 
 import java.util.Arrays;
 import java.util.Objects;
 
 public class AlarmClock
 {
+    private NotificationChannel alarmNotificationChannel;
+    private String channelID;
+
     private int hours;
     private int minutes;
     private boolean[] chosenDays;
     private String alarmClockMusicLocation;
-    private String alarmMusicName;
     private boolean vibration;
     private String description;
     private int duration;
@@ -35,6 +39,17 @@ public class AlarmClock
         this.is24HourFormat = is24HourFormat;
         this.dayPart = dayPart;
         this.alive = true;
+    }
+
+    public void createNotificationChannel()
+    {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            alarmNotificationChannel = new NotificationChannel(channelID,
+                    "Alarm clock: " + hours + " " + minutes,
+                    NotificationManager.IMPORTANCE_HIGH);
+            alarmNotificationChannel.setDescription(description);
+        }
     }
 
     public int getHours() {
@@ -115,6 +130,22 @@ public class AlarmClock
 
     public void setDayPart(DayPart dayPart) {
         this.dayPart = dayPart;
+    }
+
+    public String getChannelID() {
+        return channelID;
+    }
+
+    public void setChannelID(String channelID) {
+        this.channelID = channelID;
+    }
+
+    public NotificationChannel getAlarmNotificationChannel() {
+        return alarmNotificationChannel;
+    }
+
+    public void setAlarmNotificationChannel(NotificationChannel alarmNotificationChannel) {
+        this.alarmNotificationChannel = alarmNotificationChannel;
     }
 
     @Override

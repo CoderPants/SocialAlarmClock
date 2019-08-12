@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name= "delete_alarm_padding">10dp</dimen>
+    <dimen name="delete_alarm_max_image_width">50dp</dimen>
+    <dimen name="delete_alarm_max_image_height">50dp</dimen>
 </resources>

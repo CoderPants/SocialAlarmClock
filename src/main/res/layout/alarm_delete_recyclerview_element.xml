@@ -35,19 +35,11 @@
 
     <ImageView
         android:id="@+id/delete_alarm_clock_iv"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="@dimen/delete_alarm_max_image_width"
+        android:layout_height="@dimen/delete_alarm_max_image_width"
         android:layout_gravity="center_horizontal|end"
         android:src="@drawable/x_mark_icon"/>
 
-    <!--<TextView
-        android:id="@+id/delete_alarm_clock_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|end"
-        android:background="@drawable/delete_alarm_clock_tv_background"
-        android:text="X"/>
--->
     <View
         android:id="@+id/bottom_border"
         android:layout_width="match_parent"

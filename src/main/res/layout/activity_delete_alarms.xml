@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.donteco.alarmClock.DeleteAlarmsActivity"
+    tools:context="com.donteco.alarmClock.activities.DeleteAlarmsActivity"
     android:background="@color/white"
     android:padding = "@dimen/delete_alarm_padding">
 

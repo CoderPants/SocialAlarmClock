@@ -28,4 +28,11 @@
     <string name="alarm_duration_standart">10 min ></string>
 
     <string name="delete_alarm">Delete</string>
+    <string name="log_in_string">Log in</string>
+
+    <integer name="com_vk_sdk_AppId">7089287</integer>
+    <string name="facebook_app_id">2466571820032251</string>
+    <string name="fb_login_protocol_scheme">fb2466571820032251</string>
+
+
 </resources>
