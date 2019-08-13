@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.donteco.alarmClock.R;
 import com.donteco.alarmClock.alarm.DayOfWeek;
 import com.donteco.alarmClock.help.ConstantsForApp;
 
@@ -59,7 +60,7 @@ public class DayChooseDialog extends DialogFragment {
 
         DialogInterface.OnClickListener cancelBtnListener = (dialogInterface, i) -> dialogInterface.cancel();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
 
         builder.setTitle("Choose day of the week")
                 .setMultiChoiceItems(days, checked, multiChoiceClickListener)

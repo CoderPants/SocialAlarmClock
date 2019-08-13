@@ -1,72 +1,90 @@
 package com.donteco.alarmClock.dialogs;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.donteco.alarmClock.R;
 import com.donteco.alarmClock.help.ApplicationStorage;
 import com.donteco.alarmClock.help.ConstantsForApp;
 import com.donteco.alarmClock.socialNetwork.SocialNetworkUser;
+import com.facebook.AccessToken;
+import com.vk.api.sdk.auth.VKAccessToken;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SocialNetworkChooseDialog extends DialogFragment
 {
-    public interface SocialNetworkDialogListener {
-        void onSocialNetworkPositiveClick(boolean [] checkedSocialNetworks);
-    }
 
-    SocialNetworkDialogListener listener;
+    private String [] socialNetworkNames;
+    private boolean [] socialNetworksChecked;
 
     public SocialNetworkChooseDialog(){}
-
-    //Mb, it's illegal
-    //But only maybe...
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        try {
-            listener = (SocialNetworkChooseDialog.SocialNetworkDialogListener) context;
-        }
-        catch (ClassCastException e){
-            Log.e(ConstantsForApp.LOG_TAG, "In SocialNetworkChooseDialog onAttach method error by casting context to listener", e);
-            throw new ClassCastException(context.toString() + " must implement SocialNetworkDialogListener");
-        }
-    }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
     {
-        List<SocialNetworkUser> socialNetworkUsers = ApplicationStorage.getSocialNetworkUsers();
-        final String[] socialNetworkNames = new String[socialNetworkUsers.size()];
+        prepareData();
 
-        for (int i = 0; i < socialNetworkUsers.size(); i++)
-            socialNetworkNames[i] = socialNetworkUsers.get(i).getSocialNetworkName();
-
-        final boolean[] checked = new boolean[]{false, false};
-
-        DialogInterface.OnMultiChoiceClickListener multiChoiceClickListener = (dialogInterface, what, isChecked) -> checked[what] = isChecked;
-
-        DialogInterface.OnClickListener acceptBtnListener = (dialogInterface, id) -> listener.onSocialNetworkPositiveClick(checked);
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
         DialogInterface.OnClickListener cancelBtnListener = (dialogInterface, i) -> dialogInterface.cancel();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        if(socialNetworkNames != null && socialNetworkNames.length != 0)
+        {
+            DialogInterface.OnMultiChoiceClickListener multiChoiceClickListener = (dialogInterface, what, isChecked) -> socialNetworksChecked[what] = isChecked;
 
-        builder.setTitle("Choose day of the week")
-                .setMultiChoiceItems(socialNetworkNames, checked, multiChoiceClickListener)
-                .setPositiveButton("Ok", acceptBtnListener)
-                .setNegativeButton("Cancel", cancelBtnListener);
+            //'Cos i sent data to the fragment
+            DialogInterface.OnClickListener acceptBtnListener = (dialogInterface, id) ->
+            {
+                Intent intent = new Intent();
+                intent.putExtra("Checked_networks", socialNetworksChecked);
+                getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
+            };
+
+            builder.setTitle("Choose social network to share")
+                    .setMultiChoiceItems(socialNetworkNames, socialNetworksChecked, multiChoiceClickListener)
+                    .setPositiveButton("Ok", acceptBtnListener)
+                    .setNegativeButton("Cancel", cancelBtnListener);
+        }
+        else
+        {
+            builder.setTitle("No social network found")
+                    .setMessage("Please, log in in some social network!")
+                    .setNegativeButton("Ok", cancelBtnListener);
+        }
 
         return builder.create();
+    }
+
+    private void prepareData()
+    {
+        List<SocialNetworkUser> socialNetworkUsers = ApplicationStorage.getSocialNetworkUsers();
+        List<String> socialNetworkNames = new ArrayList<>();
+
+        VKAccessToken vkAccessToken = ApplicationStorage.getVkAccessToken();
+        AccessToken fbAccessToken = ApplicationStorage.getFbAccessToken();
+
+        if(vkAccessToken != null && vkAccessToken.isValid())
+            socialNetworkNames.add( socialNetworkUsers.get(ConstantsForApp.VK_POSITION).getSocialNetworkName() );
+
+        if(fbAccessToken != null && !fbAccessToken.isExpired())
+            socialNetworkNames.add( socialNetworkUsers.get(ConstantsForApp.FACE_BOOK_POSITION).getSocialNetworkName() );
+
+        this.socialNetworkNames = new String[socialNetworkNames.size()];
+        this.socialNetworkNames = socialNetworkNames.toArray(this.socialNetworkNames);
+
+        socialNetworksChecked = new boolean[this.socialNetworkNames.length];
+
+        Arrays.fill(socialNetworksChecked, false);
     }
 }

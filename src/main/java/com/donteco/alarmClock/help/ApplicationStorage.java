@@ -5,9 +5,12 @@ import android.content.SharedPreferences;
 
 import com.donteco.alarmClock.alarm.AlarmClock;
 import com.donteco.alarmClock.socialNetwork.SocialNetworkUser;
+import com.facebook.AccessToken;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.vk.api.sdk.auth.VKAccessToken;
 
+import org.jetbrains.annotations.Contract;
 import org.json.JSONException;
 
 import java.lang.reflect.Type;
@@ -16,8 +19,12 @@ import java.util.List;
 
 public class ApplicationStorage {
     private static ApplicationStorage applicationStorage;
+
     private static List<AlarmClock> alarmClocks;
     private static List<SocialNetworkUser> socialNetworkUsers;
+    private static VKAccessToken vkAccessToken;
+    private static AccessToken fbAccessToken;
+
     private static SharedPreferences storage;
 
     private ApplicationStorage(Context context) {
@@ -35,7 +42,11 @@ public class ApplicationStorage {
         setAlarmClocksToStorage();
     }
 
-    public static List<AlarmClock> getAlarmClocks() {
+    public static List<AlarmClock> getAlarmClocks()
+    {
+        if(alarmClocks == null)
+            alarmClocks = new ArrayList<>();
+
         return alarmClocks;
     }
 
@@ -67,10 +78,8 @@ public class ApplicationStorage {
         Type type;
 
         if (json.isEmpty())
-        {
-            alarmClocks = new ArrayList<>();
             throw new JSONException("No data in the storage");
-        }
+
         else
             type = new TypeToken<List<AlarmClock>>() {}.getType();
 
@@ -106,6 +115,9 @@ public class ApplicationStorage {
     }
 
     public static List<SocialNetworkUser> getSocialNetworkUsers() {
+        if(socialNetworkUsers == null)
+            socialNetworkUsers = new ArrayList<>();
+
         return socialNetworkUsers;
     }
 
@@ -117,7 +129,6 @@ public class ApplicationStorage {
 
         if (json.isEmpty())
         {
-            socialNetworkUsers = new ArrayList<>();
             throw new JSONException("No data in the storage");
         }
         else
@@ -126,4 +137,79 @@ public class ApplicationStorage {
         if(socialNetworkUsers == null)
             socialNetworkUsers = gson.fromJson(json, type);
     }
+
+    //----------------------------------------------------------------------------------------------
+    //VkAccess token
+
+    public static void setVkAccessToken(VKAccessToken token) {
+        System.out.println("Vk access token " + token);
+        vkAccessToken = token;
+        setVkAccessTokenToStorage();
+    }
+
+    public static VKAccessToken getVkAccessToken() {
+        return vkAccessToken;
+    }
+
+    public static void getVkAccessTokenFromStorage() throws JSONException{
+        Gson gson = new Gson();
+        String json = storage.getString(ConstantsForApp.KEY_FOR_STORED_VK_ACCESS_TOKEN, "");
+        Type type;
+
+        if (json.isEmpty())
+            throw new JSONException("No data in the storage");
+        else
+            type = new TypeToken<VKAccessToken>(){}.getType();
+
+        System.out.println("Json string " + json);
+        if(vkAccessToken == null)
+            vkAccessToken = gson.fromJson(json, type);
+
+        System.out.println("VkAccess token " + vkAccessToken);
+    }
+
+    public static void setVkAccessTokenToStorage(){
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(vkAccessToken);
+        SharedPreferences.Editor editor = storage.edit();
+        editor.putString(ConstantsForApp.KEY_FOR_STORED_VK_ACCESS_TOKEN, jsonString);
+        editor.apply();
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //Facebook access token
+
+    public static void setFbAccessToken(AccessToken token) {
+        fbAccessToken = token;
+        setFbAccessTokenToStorage();
+    }
+
+    public static AccessToken getFbAccessToken() {
+        return fbAccessToken;
+    }
+
+    public static void getFbAccessTokenFromStorage() throws JSONException{
+        Gson gson = new Gson();
+        String json = storage.getString(ConstantsForApp.KEY_FOR_STORED_FB_ACCESS_TOKEN, "");
+        Type type;
+
+        if (json.isEmpty())
+            throw new JSONException("No data in the storage");
+        else
+            type = new TypeToken<AccessToken>(){}.getType();
+
+        if(fbAccessToken == null)
+            fbAccessToken = gson.fromJson(json, type);
+
+        System.out.println("Fb access token " + fbAccessToken);
+    }
+
+    public static void setFbAccessTokenToStorage(){
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(fbAccessToken);
+        SharedPreferences.Editor editor = storage.edit();
+        editor.putString(ConstantsForApp.KEY_FOR_STORED_VK_ACCESS_TOKEN, jsonString);
+        editor.apply();
+    }
+
 }

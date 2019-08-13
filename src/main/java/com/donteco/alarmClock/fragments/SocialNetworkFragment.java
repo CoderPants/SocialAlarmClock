@@ -63,13 +63,14 @@ public class SocialNetworkFragment extends Fragment {
     {
         List<SocialNetworkUser> userList = ApplicationStorage.getSocialNetworkUsers();
 
+        //At the first app initialization
         if(userList.isEmpty())
         {
             userList.add(new SocialNetworkUser(ConstantsForApp.VK_NAME,
-                    getResources().getDrawable(R.drawable.vk_social_icon, null)));
+                    getResources().getDrawable(R.drawable.vk_round_icon, null)));
 
             userList.add(new SocialNetworkUser(ConstantsForApp.FACEBOOK_NAME,
-                    getResources().getDrawable(R.drawable.facebook_social_icon, null)));
+                    getResources().getDrawable(R.drawable.facebook_round_icon, null)));
         }
 
 

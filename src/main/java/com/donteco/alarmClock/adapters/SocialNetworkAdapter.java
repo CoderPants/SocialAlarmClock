@@ -71,26 +71,28 @@ public class SocialNetworkAdapter extends RecyclerView.Adapter<SocialNetworkAdap
             frameLayout = itemView.findViewById(R.id.social_media_fl_for_all_info);
         }
 
-        private void bind(SocialNetworkUser socialNetwork)
+        private void bind(SocialNetworkUser socialNetworkUser)
         {
-            socialNetworkImage.setBackground(socialNetwork.getSocialNetworkIcon());
-            socialNetworkName.setText(socialNetwork.getSocialNetworkName());
+            socialNetworkImage.setBackground(socialNetworkUser.getSocialNetworkIcon());
+            socialNetworkName.setText(socialNetworkUser.getSocialNetworkName());
 
-            if(socialNetwork.getSurname() != null || socialNetwork.getName() != null)
+            if(socialNetworkUser.getSurname() != null || socialNetworkUser.getName() != null)
             {
-                String outputText = socialNetwork.getName() + " " + socialNetwork.getSurname();
+                String outputText = socialNetworkUser.getName() + " " + socialNetworkUser.getSurname();
                 socialNetworkUserName.setText(outputText);
             }
             else
                 socialNetworkUserName.setText(R.string.log_in_string);
 
-            if(socialNetwork.getAvatar() != null)
+            if(socialNetworkUser.getAvatar() != null)
                 Picasso.get()
-                .load(socialNetwork.getAvatar())
+                .load(socialNetworkUser.getAvatar())
                 .noFade()
                 .into(socialNetworkImage);
+            else
+                socialNetworkImage.setImageDrawable(socialNetworkUser.getSocialNetworkIcon());
 
-            frameLayout.setOnClickListener(view -> socialNetworkCallBack.onPressed(socialNetwork));
+            frameLayout.setOnClickListener(view -> socialNetworkCallBack.onPressed(socialNetworkUser));
         }
     }
 

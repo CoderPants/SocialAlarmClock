@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.donteco.alarmClock.R;
 import com.donteco.alarmClock.help.ConstantsForApp;
 
 public class DurationChooseDialog extends DialogFragment {
@@ -59,7 +60,7 @@ public class DurationChooseDialog extends DialogFragment {
                userChoice[item] = duration[item];
         };
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
 
         builder.setTitle("Choose duration of the alarm")
                 .setSingleChoiceItems(duration, -1, singleChoiceListener)

@@ -2,6 +2,8 @@ package com.donteco.alarmClock.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -9,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,7 +26,19 @@ import com.donteco.alarmClock.alarm.AlarmClock;
 import com.donteco.alarmClock.alarm.DayPart;
 import com.donteco.alarmClock.adapters.AlarmClockAdapter;
 import com.donteco.alarmClock.dialogs.SocialNetworkChooseDialog;
+import com.donteco.alarmClock.help.ApplicationStorage;
 import com.donteco.alarmClock.help.ConstantsForApp;
+import com.donteco.alarmClock.socialNetwork.VkWallRequest;
+import com.facebook.AccessToken;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
+import com.vk.api.sdk.VK;
+import com.vk.api.sdk.VKApiCallback;
+import com.vk.api.sdk.auth.VKAccessToken;
+import com.vk.api.sdk.exceptions.VKApiExecutionException;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Calendar;
 
@@ -34,6 +49,10 @@ public class AlarmClockFragment extends Fragment {
 
     private Activity activity;
     private AlarmClockAdapter alarmClockAdapter;
+
+
+    //HEY YOU!
+    private String timeForSharing;
 
     @Nullable
     @Override
@@ -78,8 +97,14 @@ public class AlarmClockFragment extends Fragment {
             }
 
             @Override
-            public void onSharePress() {
+            public void onSharePress(String curTime)
+            {
+                timeForSharing = curTime;
+
                 SocialNetworkChooseDialog dayChooseDialog = new SocialNetworkChooseDialog();
+                dayChooseDialog.setTargetFragment(AlarmClockFragment.this,
+                        ConstantsForApp.SHARE_DIALOG_SHOW_REQUEST);
+
                 dayChooseDialog.show(getFragmentManager(), ConstantsForApp.SOCIAL_NETWORK_TAG);
             }
         });
@@ -111,10 +136,77 @@ public class AlarmClockFragment extends Fragment {
                 case ConstantsForApp.ALARM_CHANGE_INFO_REQUEST:
                     alarmClockAdapter.setItem(convertToAlarmClock(data));
                     break;
+
+                case ConstantsForApp.SHARE_DIALOG_SHOW_REQUEST:
+                    boolean [] checkedSocialNetwork = data.getBooleanArrayExtra("Checked_networks");
+
+                    for (boolean b : checkedSocialNetwork) {
+                        System.out.println("Checked socialNetworks " + b);
+                    }
+
+                    share(checkedSocialNetwork);
+                    break;
             }
         }
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void share(boolean[] checkedSocialNetwork)
+    {
+        if(checkedSocialNetwork[0])
+           VKShare();
+
+
+        if(checkedSocialNetwork[1])
+            FBShare();
+    }
+
+    private void VKShare()
+    {
+        VKAccessToken curToken = ApplicationStorage.getVkAccessToken();
+
+        String postMessage = ConstantsForApp.VK_START_OF_POST_MESSAGE
+                + timeForSharing + ConstantsForApp.VK_END_OF_POST_MESSAGE;
+
+        VkWallRequest wallRequest = new VkWallRequest("wall.post",
+                (curToken != null && curToken.isValid())? curToken.getUserId(): 0,
+                postMessage);
+
+        VK.execute(wallRequest, new VKApiCallback<Integer>() {
+            @Override
+            public void success(Integer integer) {
+                Toast.makeText(getContext(), "VK sharing completed!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void fail(@NotNull VKApiExecutionException e) {
+                Toast.makeText(getContext(), "VK sharing failed! Check internet connection.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void FBShare()
+    {
+        AccessToken faceBookToken = ApplicationStorage.getFbAccessToken();
+        System.out.println("Permitions " + faceBookToken.getPermissions());
+
+        Bitmap image = BitmapFactory.decodeResource(getContext().getResources(),
+                R.drawable.alarm_clock_for_social_sharing);
+        SharePhoto photo = new SharePhoto.Builder()
+                .setBitmap(image)
+                .build();
+
+        SharePhotoContent content = new SharePhotoContent.Builder()
+                .addPhoto(photo)
+                .build();
+
+        ShareDialog shareFaceBook = new ShareDialog(this);
+
+        System.out.println("Can show " + shareFaceBook.canShow(content, ShareDialog.Mode.AUTOMATIC));
+
+        if(shareFaceBook.canShow(content, ShareDialog.Mode.AUTOMATIC))
+            shareFaceBook.show(content);
     }
 
     private AlarmClock convertToAlarmClock(Intent data)

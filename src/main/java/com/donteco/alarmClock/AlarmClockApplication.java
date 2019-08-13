@@ -19,9 +19,33 @@ public class AlarmClockApplication extends Application {
         ApplicationStorage.getInstance(getApplicationContext());
         try {
             ApplicationStorage.getAlarmClocksFromStorage();
-            ApplicationStorage.getSocialNetworkUsersFormStorage();
         } catch (JSONException e) {
-            Log.i(ConstantsForApp.LOG_TAG, "In application onCreate. Json exception", e);
+            Log.i(ConstantsForApp.LOG_TAG,
+                    "In application onCreate. Json exception by creating empty alarm clocks", e);
+        }
+
+        try {
+            ApplicationStorage.getSocialNetworkUsersFormStorage();
+        }
+        catch (JSONException e) {
+            Log.i(ConstantsForApp.LOG_TAG,
+                    "In application onCreate. Json exception by creating empty social network users", e);
+        }
+
+        try{
+            ApplicationStorage.getVkAccessTokenFromStorage();
+        }
+        catch (JSONException e){
+            Log.i(ConstantsForApp.LOG_TAG,
+                    "In application onCreate. Json exception by creating empty vk access token", e);
+        }
+
+        try{
+            ApplicationStorage.getFbAccessTokenFromStorage();
+        }
+        catch (JSONException e){
+            Log.i(ConstantsForApp.LOG_TAG,
+                    "In application onCreate. Json exception by creating empty fb access token", e);
         }
 
         VK.initialize(getApplicationContext());

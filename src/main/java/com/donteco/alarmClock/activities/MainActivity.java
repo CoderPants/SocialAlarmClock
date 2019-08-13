@@ -62,8 +62,6 @@ public class MainActivity extends FragmentActivity {
     //Tracking if user logged in
     private AccessTokenTracker accessTokenTracker;
 
-    private static final int VK_POSITION = 0;
-    private static final int FACE_BOOK_POSITION = 1;
 
     private CallbackManager callbackManager;
 
@@ -214,13 +212,12 @@ public class MainActivity extends FragmentActivity {
     public void fbLogin()
     {
         LoginManager loginManager = LoginManager.getInstance();
-        loginManager.logInWithReadPermissions(this, Arrays.asList("public_profile"));
+        loginManager.logInWithReadPermissions(this, Collections.singletonList("public_profile"));
+        //loginManager.logInWithPublishPermissions(this, Collections.singleton("user_posts"));
         loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>()
         {
             @Override
             public void onSuccess(LoginResult loginResult) {
-
-
             }
 
             @Override
@@ -237,6 +234,8 @@ public class MainActivity extends FragmentActivity {
 
     public void loadUserData(AccessToken accessToken)
     {
+        ApplicationStorage.setFbAccessToken(accessToken);
+
         GraphRequest request = GraphRequest.newMeRequest(accessToken, (object, response) -> {
             try
             {
@@ -249,7 +248,8 @@ public class MainActivity extends FragmentActivity {
 
                 String[] firstLastName = name.split(" ");
 
-                socialNetworkFragment.updateUser(FACE_BOOK_POSITION,
+
+                socialNetworkFragment.updateUser(ConstantsForApp.FACE_BOOK_POSITION,
                         new SocialNetworkUser(id, firstLastName[0], firstLastName[1], url, ConstantsForApp.FACEBOOK_NAME));
 
             } catch (JSONException e) {
@@ -267,7 +267,7 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
-        if(requestCode == 64206)
+        if(requestCode == ConstantsForApp.FACEBOOK_LOGIN_CODE)
         {
             callbackManager.onActivityResult(requestCode, resultCode, data);
             super.onActivityResult(requestCode, resultCode, data);
@@ -287,6 +287,10 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onLogin(@NotNull VKAccessToken vkAccessToken) {
                 Toast.makeText(MainActivity.this, "Logging was successfully", Toast.LENGTH_SHORT).show();
+
+                //Storing in the sharedPref
+                ApplicationStorage.setVkAccessToken(vkAccessToken);
+
                 int userId = vkAccessToken.getUserId();
 
                 List<SocialNetworkUser> userList = new ArrayList<>(
@@ -296,7 +300,9 @@ public class MainActivity extends FragmentActivity {
                 VK.execute(request, new VKApiCallback<List<SocialNetworkUser>>() {
                     @Override
                     public void success(List<SocialNetworkUser> users) {
-                        socialNetworkFragment.updateUser(VK_POSITION, users.get(0));
+                        System.out.println("In success list " + users);
+                        System.out.println("In success fragment " + socialNetworkFragment);
+                        socialNetworkFragment.updateUser(ConstantsForApp.VK_POSITION, users.get(0));
                     }
 
                     @Override

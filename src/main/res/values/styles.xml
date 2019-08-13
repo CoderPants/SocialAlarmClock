@@ -14,4 +14,22 @@
         <item name="android:trackTint">@color/switch_color</item>
     </style>
 
+    <style name="AlertDialogTheme" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <!--<item name="android:listChoiceIndicatorMultiple">@android:style/Theme.Holo</item>-->
+        <item name="android:buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/blue_for_switch</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/blue_for_switch</item>
+    </style>
+
+    <style name="CheckedButtonStyle" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:colorAccent">@color/blue_for_switch</item>
+    </style>
+
 </resources>

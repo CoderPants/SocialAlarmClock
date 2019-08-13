@@ -82,7 +82,7 @@ public class AlarmClockAdapter extends RecyclerView.Adapter<AlarmClockAdapter.Al
         return alarmClocks.size();
     }
 
-    public class AlarmClockViewHolder extends RecyclerView.ViewHolder implements SocialNetworkChooseDialog.SocialNetworkDialogListener
+    public class AlarmClockViewHolder extends RecyclerView.ViewHolder
     {
         private ImageView shareBtn;
 
@@ -178,21 +178,11 @@ public class AlarmClockAdapter extends RecyclerView.Adapter<AlarmClockAdapter.Al
         }
 
         private void shareBtnLogic() {
-            shareBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    /*DayChooseDialog dayChooseDialog = new DayChooseDialog();
-                    dayChooseDialog.show(getSupportFragmentManager(), ConstantsForApp.DAY_DIALOG_TAG);*/
-                    alarmClockCallBack.onSharePress();
-                }
+            shareBtn.setOnClickListener(view -> {
+                /*DayChooseDialog dayChooseDialog = new DayChooseDialog();
+                dayChooseDialog.show(getSupportFragmentManager(), ConstantsForApp.DAY_DIALOG_TAG);*/
+                alarmClockCallBack.onSharePress(alarmTime.getText().toString());
             });
-        }
-
-        @Override
-        public void onSocialNetworkPositiveClick(boolean[] checkedSocialNetworks) {
-            for (int i = 0; i < checkedSocialNetworks.length; i++) {
-                System.out.println("Social network is " + checkedSocialNetworks[i]);
-            }
         }
     }
 
@@ -200,6 +190,6 @@ public class AlarmClockAdapter extends RecyclerView.Adapter<AlarmClockAdapter.Al
     public interface AlarmClockCallBack {
         void onLongPress();
         void onPress(int position);
-        void onSharePress();
+        void onSharePress(String time);
     }
 }

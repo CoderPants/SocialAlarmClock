@@ -6,15 +6,17 @@ public class ConstantsForApp {
 
     public static final int MUSIC_PERMITION_REQUEST = 1;
     public static final int ONE_SECOND_PAUSE = 1000;
-    public static final String LOG_TAG = "alarmClock.LogTag";
+    public static final String LOG_TAG = "MY_LOG_TAG_FOR_APP";
     public static final int PAGE_COUNT = 3;
     public static final int IMAGE_SIZE_IN_TABS = 60;
     public static final int ALARM_GET_INFO_REQUEST = 10;
     public static final int DELETE_ALARM_REQUEST = 20;
     public static final int ALARM_CHANGE_INFO_REQUEST = 30;
+    public static final int SHARE_DIALOG_SHOW_REQUEST = 40;
     //Need to find solution
     //Find code by printing it in the console
     public static final int VK_LOGGING_REQUEST_CODE = 282;
+    public static final int FACEBOOK_LOGIN_CODE = 64206;
     public static final int MUSIC_NAME_LENGTH = 10;
 
     public static final DayOfWeek[] DAYS_LIST = new DayOfWeek[] {
@@ -40,8 +42,17 @@ public class ConstantsForApp {
 
     public static final String KEY_FOR_STORED_ALARMS = "GET_ALARMS_IN_STORAGE";
     public static final String KEY_FOR_STORED_SOCIAL_NETWORK_USERS = "GET_USERS_IN_STORAGE";
+    public static final String KEY_FOR_STORED_VK_ACCESS_TOKEN = "GET_VK_ACCESS_TOKEN";
+    public static final String KEY_FOR_STORED_FB_ACCESS_TOKEN = "GET_FB_ACCESS_TOKEN";
 
     public static final String FACEBOOK_NAME = "FaceBook";
     public static final String VK_NAME = "VK";
+
+    public static final int VK_POSITION = 0;
+    public static final int FACE_BOOK_POSITION = 1;
+
+
+    public static final String VK_START_OF_POST_MESSAGE = "TESTING APP!!!!!!\nHello, guys! I set the alarm clock to : ";
+    public static final String VK_END_OF_POST_MESSAGE = " see you later!";
 
 }
