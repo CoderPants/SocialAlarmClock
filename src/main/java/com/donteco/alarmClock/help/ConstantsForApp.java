@@ -50,9 +50,10 @@ public class ConstantsForApp {
 
     public static final int VK_POSITION = 0;
     public static final int FACE_BOOK_POSITION = 1;
+    public static final int AMOUNT_OF_SOCIAL_NETWORKS = 2;
 
-
-    public static final String VK_START_OF_POST_MESSAGE = "TESTING APP!!!!!!\nHello, guys! I set the alarm clock to : ";
+    public static final String VK_START_OF_POST_MESSAGE = "TESTING APP!!!!!!\n" +
+            "Hello, guys! I set the alarm clock to : ";
     public static final String VK_END_OF_POST_MESSAGE = " see you later!";
 
 }

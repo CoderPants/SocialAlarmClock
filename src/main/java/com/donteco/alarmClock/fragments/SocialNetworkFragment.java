@@ -1,5 +1,6 @@
 package com.donteco.alarmClock.fragments;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -66,27 +67,43 @@ public class SocialNetworkFragment extends Fragment {
         //At the first app initialization
         if(userList.isEmpty())
         {
-            userList.add(new SocialNetworkUser(ConstantsForApp.VK_NAME,
-                    getResources().getDrawable(R.drawable.vk_round_icon, null)));
-
-            userList.add(new SocialNetworkUser(ConstantsForApp.FACEBOOK_NAME,
-                    getResources().getDrawable(R.drawable.facebook_round_icon, null)));
+            userList.add(new SocialNetworkUser(ConstantsForApp.VK_NAME));
+            userList.add(new SocialNetworkUser(ConstantsForApp.FACEBOOK_NAME));
         }
 
 
-        socialNetworkAdapter = new SocialNetworkAdapter(socialNetworkUser ->
-        {
-            switch (socialNetworkUser.getSocialNetworkName())
-            {
-                case "VK":
-                    activity.vkLogin();
-                    break;
-                case "FaceBook":
-                    activity.fbLogin();
-                    break;
+        socialNetworkAdapter = new SocialNetworkAdapter(new SocialNetworkAdapter.SocialNetworkCallBack() {
+            @Override
+            public void onPressed(SocialNetworkUser socialNetworkUser) {
+                switch (socialNetworkUser.getSocialNetworkName())
+                {
+                    case "VK":
+                        activity.vkLogin();
+                        break;
+                    case "FaceBook":
+                        activity.fbLogin();
+                        break;
 
+                }
             }
-        }, userList);
+
+            @Override
+            public Drawable onNoAvatarCondition(int position) {
+                Drawable result = null;
+
+                switch (position)
+                {
+                    case 0:
+                        result = getResources().getDrawable(R.drawable.vk_round_icon, null);
+                        break;
+                    case 1:
+                        result = getResources().getDrawable(R.drawable.facebook_round_icon, null);
+                        break;
+                }
+
+                return result;
+            }
+        });
     }
 
     public void updateUser(int position, SocialNetworkUser user) {

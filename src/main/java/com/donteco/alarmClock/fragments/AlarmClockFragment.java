@@ -152,14 +152,30 @@ public class AlarmClockFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+
+    //Need to fix it
     private void share(boolean[] checkedSocialNetwork)
     {
-        if(checkedSocialNetwork[0])
-           VKShare();
+        VKAccessToken vkAccessToken = ApplicationStorage.getVkAccessToken();
+
+        if(checkedSocialNetwork.length == ConstantsForApp.AMOUNT_OF_SOCIAL_NETWORKS)
+        {
+            if(checkedSocialNetwork[0])
+                VKShare();
 
 
-        if(checkedSocialNetwork[1])
-            FBShare();
+            if(checkedSocialNetwork[1])
+                FBShare();
+        }
+        else
+        {
+            if(checkedSocialNetwork[0])
+                if(vkAccessToken.isValid())
+                    VKShare();
+
+                if(!AccessToken.getCurrentAccessToken().isExpired())
+                    FBShare();
+        }
     }
 
     private void VKShare()
@@ -188,7 +204,8 @@ public class AlarmClockFragment extends Fragment {
 
     private void FBShare()
     {
-        AccessToken faceBookToken = ApplicationStorage.getFbAccessToken();
+        //AccessToken faceBookToken = ApplicationStorage.getFbAccessToken();
+        AccessToken faceBookToken = AccessToken.getCurrentAccessToken();
         System.out.println("Permitions " + faceBookToken.getPermissions());
 
         Bitmap image = BitmapFactory.decodeResource(getContext().getResources(),

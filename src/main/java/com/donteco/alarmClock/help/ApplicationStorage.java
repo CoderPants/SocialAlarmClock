@@ -152,7 +152,9 @@ public class ApplicationStorage {
     }
 
     public static void getVkAccessTokenFromStorage() throws JSONException{
-        Gson gson = new Gson();
+
+        vkAccessToken = VKAccessToken.Companion.restore(storage);
+        /*Gson gson = new Gson();
         String json = storage.getString(ConstantsForApp.KEY_FOR_STORED_VK_ACCESS_TOKEN, "");
         Type type;
 
@@ -163,17 +165,19 @@ public class ApplicationStorage {
 
         System.out.println("Json string " + json);
         if(vkAccessToken == null)
-            vkAccessToken = gson.fromJson(json, type);
+            vkAccessToken = gson.fromJson(json, type);*/
 
         System.out.println("VkAccess token " + vkAccessToken);
     }
 
     public static void setVkAccessTokenToStorage(){
-        Gson gson = new Gson();
+
+        vkAccessToken.save(storage);
+        /*Gson gson = new Gson();
         String jsonString = gson.toJson(vkAccessToken);
         SharedPreferences.Editor editor = storage.edit();
         editor.putString(ConstantsForApp.KEY_FOR_STORED_VK_ACCESS_TOKEN, jsonString);
-        editor.apply();
+        editor.apply();*/
     }
 
     //----------------------------------------------------------------------------------------------

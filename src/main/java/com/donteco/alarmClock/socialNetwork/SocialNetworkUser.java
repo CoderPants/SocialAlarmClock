@@ -14,7 +14,6 @@ public class SocialNetworkUser
     private String surname;
     private String avatar;
     private String socialNetworkName;
-    private transient Drawable socialNetworkIcon;
 
     private boolean isAuthorized;
 
@@ -22,9 +21,8 @@ public class SocialNetworkUser
         this.id = id;
     }
 
-    public SocialNetworkUser(String socialNetworkName, Drawable socialNetworkIcon) {
+    public SocialNetworkUser(String socialNetworkName) {
         this.socialNetworkName = socialNetworkName;
-        this.socialNetworkIcon = socialNetworkIcon;
     }
 
     public SocialNetworkUser(int id, String name, String surname, String avatar, String socialNetworkName) {
@@ -59,14 +57,6 @@ public class SocialNetworkUser
 
     public void setAuthorized(boolean authorized) {
         isAuthorized = authorized;
-    }
-
-    public Drawable getSocialNetworkIcon() {
-        return socialNetworkIcon;
-    }
-
-    public void setSocialNetworkIcon(Drawable socialNetworkIcon) {
-        this.socialNetworkIcon = socialNetworkIcon;
     }
 
     public String getSocialNetworkName() {

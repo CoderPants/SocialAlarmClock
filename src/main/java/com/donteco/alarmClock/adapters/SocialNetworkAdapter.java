@@ -1,5 +1,6 @@
 package com.donteco.alarmClock.adapters;
 
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.donteco.alarmClock.R;
+import com.donteco.alarmClock.help.ApplicationStorage;
 import com.donteco.alarmClock.socialNetwork.SocialNetworkUser;
 import com.squareup.picasso.Picasso;
 
@@ -23,10 +25,10 @@ public class SocialNetworkAdapter extends RecyclerView.Adapter<SocialNetworkAdap
     private final List<SocialNetworkUser> users;
     private SocialNetworkCallBack socialNetworkCallBack;
 
-    public SocialNetworkAdapter(SocialNetworkCallBack socialNetworkCallBack, List<SocialNetworkUser> users)
+    public SocialNetworkAdapter(SocialNetworkCallBack socialNetworkCallBack)
     {
         this.socialNetworkCallBack = socialNetworkCallBack;
-        this.users = users;
+        users = ApplicationStorage.getSocialNetworkUsers();
     }
 
     public void updateUser(int position, SocialNetworkUser socialNetworkUser){
@@ -73,7 +75,6 @@ public class SocialNetworkAdapter extends RecyclerView.Adapter<SocialNetworkAdap
 
         private void bind(SocialNetworkUser socialNetworkUser)
         {
-            socialNetworkImage.setBackground(socialNetworkUser.getSocialNetworkIcon());
             socialNetworkName.setText(socialNetworkUser.getSocialNetworkName());
 
             if(socialNetworkUser.getSurname() != null || socialNetworkUser.getName() != null)
@@ -90,7 +91,7 @@ public class SocialNetworkAdapter extends RecyclerView.Adapter<SocialNetworkAdap
                 .noFade()
                 .into(socialNetworkImage);
             else
-                socialNetworkImage.setImageDrawable(socialNetworkUser.getSocialNetworkIcon());
+                socialNetworkImage.setImageDrawable(socialNetworkCallBack.onNoAvatarCondition(getAdapterPosition()));
 
             frameLayout.setOnClickListener(view -> socialNetworkCallBack.onPressed(socialNetworkUser));
         }
@@ -98,5 +99,6 @@ public class SocialNetworkAdapter extends RecyclerView.Adapter<SocialNetworkAdap
 
     public interface SocialNetworkCallBack {
         void onPressed(SocialNetworkUser socialNetworkUser);
+        Drawable onNoAvatarCondition(int position);
     }
 }

@@ -41,7 +41,10 @@ public class SocialNetworkChooseDialog extends DialogFragment
 
         if(socialNetworkNames != null && socialNetworkNames.length != 0)
         {
-            DialogInterface.OnMultiChoiceClickListener multiChoiceClickListener = (dialogInterface, what, isChecked) -> socialNetworksChecked[what] = isChecked;
+            DialogInterface.OnMultiChoiceClickListener multiChoiceClickListener = (dialogInterface, what, isChecked) ->
+            {
+                socialNetworksChecked[what] = isChecked;
+            };
 
             //'Cos i sent data to the fragment
             DialogInterface.OnClickListener acceptBtnListener = (dialogInterface, id) ->
@@ -72,7 +75,8 @@ public class SocialNetworkChooseDialog extends DialogFragment
         List<String> socialNetworkNames = new ArrayList<>();
 
         VKAccessToken vkAccessToken = ApplicationStorage.getVkAccessToken();
-        AccessToken fbAccessToken = ApplicationStorage.getFbAccessToken();
+        //AccessToken fbAccessToken = ApplicationStorage.getFbAccessToken();
+        AccessToken fbAccessToken = AccessToken.getCurrentAccessToken();
 
         if(vkAccessToken != null && vkAccessToken.isValid())
             socialNetworkNames.add( socialNetworkUsers.get(ConstantsForApp.VK_POSITION).getSocialNetworkName() );
@@ -83,7 +87,7 @@ public class SocialNetworkChooseDialog extends DialogFragment
         this.socialNetworkNames = new String[socialNetworkNames.size()];
         this.socialNetworkNames = socialNetworkNames.toArray(this.socialNetworkNames);
 
-        socialNetworksChecked = new boolean[this.socialNetworkNames.length];
+        socialNetworksChecked = new boolean[ConstantsForApp.AMOUNT_OF_SOCIAL_NETWORKS];
 
         Arrays.fill(socialNetworksChecked, false);
     }
