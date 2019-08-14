@@ -2,10 +2,12 @@
 <resources>
     <dimen name="alarm_widget_padding">10dp</dimen>
     <dimen name="alarm_widget_text_size">10sp</dimen>
+    <dimen name="alarm_widget_margin_end">50dp</dimen>
     <dimen name= "alarm_widget_text_size_for_time">30sp</dimen>
+    <dimen name= "alarm_widget_text_size_for_day_part">17sp</dimen>
     <dimen name= "alarm_widget_text_size_for_name">15sp</dimen>
     <dimen name="add_alarm_element_text_size_for_days">12sp</dimen>
-    <dimen name="add_alarm_element_switch_padding_top">50dp</dimen>
+    <dimen name="add_alarm_element_switch_padding_top">60dp</dimen>
     <dimen name="add_alarm_element_tv_margin_bottom">10dp</dimen>
 
     <dimen name="add_alarm_btn_margin_left">10dp</dimen>

@@ -59,8 +59,8 @@ public class MainActivity extends FragmentActivity {
 
     private SocialNetworkFragment socialNetworkFragment;
 
-    //Tracking if user logged in
-    private AccessTokenTracker accessTokenTracker;
+/*    //Tracking if user logged in
+    private AccessTokenTracker accessTokenTracker;*/
 
 
     private CallbackManager callbackManager;
@@ -72,7 +72,7 @@ public class MainActivity extends FragmentActivity {
 
         callbackManager = CallbackManager.Factory.create();
 
-        accessTokenTracker = new AccessTokenTracker() {
+        /*accessTokenTracker = new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken)
             {
@@ -83,7 +83,7 @@ public class MainActivity extends FragmentActivity {
                 else
                     loadUserData(currentAccessToken);
             }
-        };
+        };*/
 
         ActivityHelper activityHelper = new ActivityHelper(this);
         activityHelper.getRidOfTopBar();
@@ -234,7 +234,7 @@ public class MainActivity extends FragmentActivity {
 
     public void loadUserData(AccessToken accessToken)
     {
-        ApplicationStorage.setFbAccessToken(accessToken);
+        //ApplicationStorage.setFbAccessToken(accessToken);
 
         GraphRequest request = GraphRequest.newMeRequest(accessToken, (object, response) -> {
             try

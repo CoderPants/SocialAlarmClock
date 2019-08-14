@@ -18,9 +18,10 @@
             android:background="@color/white80"
             android:scaleType="fitXY"
             android:src = "@drawable/share_icon"
-            android:layout_marginEnd="50dp"
-            android:layout_marginTop="15dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="@dimen/alarm_widget_margin_end"
             />
+
 
         <LinearLayout
             android:id="@+id/ll_alarm_clock_recyclerview_fragment"
@@ -35,6 +36,17 @@
                 android:layout_gravity="center_horizontal|start"
                 android:fontFamily="@string/text_style"
                 android:textSize="@dimen/alarm_widget_text_size_for_time"
+                android:textAlignment="center"
+                android:textColor="@color/black95"
+                android:layout_marginBottom="@dimen/add_alarm_element_tv_margin_bottom"/>
+
+            <TextView
+                android:id="@+id/alarm_clock_chosen_day_part"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_gravity="center_horizontal|start"
+                android:fontFamily="@string/text_style"
+                android:textSize="@dimen/alarm_widget_text_size_for_day_part"
                 android:textAlignment="center"
                 android:textColor="@color/black95"
                 android:layout_marginBottom="@dimen/add_alarm_element_tv_margin_bottom"/>

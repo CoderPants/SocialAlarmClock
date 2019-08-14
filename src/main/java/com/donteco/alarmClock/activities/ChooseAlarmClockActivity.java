@@ -7,7 +7,6 @@ import androidx.core.content.ContextCompat;
 import androidx.loader.content.CursorLoader;
 
 import android.Manifest;
-import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -94,8 +93,8 @@ public class ChooseAlarmClockActivity extends AppCompatActivity
 
         if(!DateFormat.is24HourFormat(this))
         {
-            maxHours = 12;
-            minHours = 1;
+            maxHours = 11;
+            minHours = 0;
             LinearLayout amPmLayout = findViewById(R.id.ll_choose_alarm_am_pm);
             View bottomLine = findViewById(R.id.bottom_border_alarm_am_pm);
             amPmLayout.setVisibility(View.VISIBLE);
@@ -140,13 +139,14 @@ public class ChooseAlarmClockActivity extends AppCompatActivity
             songData = Uri.parse(songLocation);
             loadAudioFile();
         }
-        vibrationSwitch.setChecked(curAlarmClock.isVibration());
+
+        vibrationSwitch.setChecked(curAlarmClock.hasVibration());
         alarmDescription.setText(curAlarmClock.getDescription());
         alarmDuration.setText(String.format(Locale.ENGLISH, "%d minutes", curAlarmClock.getDuration()));
 
-        NotificationManager manager = getSystemService(NotificationManager.class);
+        /*NotificationManager manager = getSystemService(NotificationManager.class);
         assert manager != null;
-        manager.deleteNotificationChannel(curAlarmClock.getChannelID());
+        manager.deleteNotificationChannel(curAlarmClock.getChannelID());*/
     }
 
     private void logicForAddingAlarmClock()

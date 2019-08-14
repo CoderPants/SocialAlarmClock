@@ -5,12 +5,10 @@ import android.content.SharedPreferences;
 
 import com.donteco.alarmClock.alarm.AlarmClock;
 import com.donteco.alarmClock.socialNetwork.SocialNetworkUser;
-import com.facebook.AccessToken;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.vk.api.sdk.auth.VKAccessToken;
 
-import org.jetbrains.annotations.Contract;
 import org.json.JSONException;
 
 import java.lang.reflect.Type;
@@ -23,7 +21,7 @@ public class ApplicationStorage {
     private static List<AlarmClock> alarmClocks;
     private static List<SocialNetworkUser> socialNetworkUsers;
     private static VKAccessToken vkAccessToken;
-    private static AccessToken fbAccessToken;
+    //private static AccessToken fbAccessToken;
 
     private static SharedPreferences storage;
 
@@ -58,14 +56,14 @@ public class ApplicationStorage {
         setAlarmClocksToStorage();
     }
 
-    public static void removeAlarmClock(AlarmClock alarmClock) {
+    /*public static void removeAlarmClock(AlarmClock alarmClock) {
         alarmClocks.remove(alarmClock);
         setAlarmClocksToStorage();
-    }
+    }*/
 
-    public static AlarmClock getAlarmClock(int position) {
+   /* public static AlarmClock getAlarmClock(int position) {
         return alarmClocks.get(position);
-    }
+    }*/
 
     public static void setAlarmClock(int position, AlarmClock alarmClock) {
         alarmClocks.set(position, alarmClock);
@@ -97,9 +95,9 @@ public class ApplicationStorage {
 
     //---------------------------------------------------------------------------------------------
 
-    public static void addUser(SocialNetworkUser newUser) {
+    /*public static void addUser(SocialNetworkUser newUser) {
         socialNetworkUsers.add(newUser);
-    }
+    }*/
 
     public static void setUser(int position, SocialNetworkUser newUser) {
         socialNetworkUsers.set(position, newUser);
@@ -151,7 +149,7 @@ public class ApplicationStorage {
         return vkAccessToken;
     }
 
-    public static void getVkAccessTokenFromStorage() throws JSONException{
+    public static void getVkAccessTokenFromStorage(){
 
         vkAccessToken = VKAccessToken.Companion.restore(storage);
         /*Gson gson = new Gson();
@@ -170,7 +168,7 @@ public class ApplicationStorage {
         System.out.println("VkAccess token " + vkAccessToken);
     }
 
-    public static void setVkAccessTokenToStorage(){
+    private static void setVkAccessTokenToStorage(){
 
         vkAccessToken.save(storage);
         /*Gson gson = new Gson();
@@ -182,8 +180,10 @@ public class ApplicationStorage {
 
     //----------------------------------------------------------------------------------------------
     //Facebook access token
+    //Don't need it
+    //For now
 
-    public static void setFbAccessToken(AccessToken token) {
+    /*public static void setFbAccessToken(AccessToken token) {
         fbAccessToken = token;
         setFbAccessTokenToStorage();
     }
@@ -214,6 +214,6 @@ public class ApplicationStorage {
         SharedPreferences.Editor editor = storage.edit();
         editor.putString(ConstantsForApp.KEY_FOR_STORED_VK_ACCESS_TOKEN, jsonString);
         editor.apply();
-    }
+    }*/
 
 }

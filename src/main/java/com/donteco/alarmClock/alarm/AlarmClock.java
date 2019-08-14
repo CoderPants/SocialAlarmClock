@@ -9,8 +9,6 @@ import java.util.Objects;
 
 public class AlarmClock
 {
-    private NotificationChannel alarmNotificationChannel;
-    private String channelID;
 
     private int hours;
     private int minutes;
@@ -41,16 +39,6 @@ public class AlarmClock
         this.alive = true;
     }
 
-    public void createNotificationChannel()
-    {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-        {
-            alarmNotificationChannel = new NotificationChannel(channelID,
-                    "Alarm clock: " + hours + " " + minutes,
-                    NotificationManager.IMPORTANCE_HIGH);
-            alarmNotificationChannel.setDescription(description);
-        }
-    }
 
     public int getHours() {
         return hours;
@@ -84,7 +72,7 @@ public class AlarmClock
         this.alarmClockMusicLocation = alarmClockMusicLocation;
     }
 
-    public boolean isVibration() {
+    public boolean hasVibration() {
         return vibration;
     }
 
@@ -128,24 +116,19 @@ public class AlarmClock
         return dayPart;
     }
 
+    public String getDayPartToString(){
+        switch (dayPart)
+        {
+            case PM:
+                return "PM";
+            case AM:
+                return "AM";
+        }
+        return null;
+    }
+
     public void setDayPart(DayPart dayPart) {
         this.dayPart = dayPart;
-    }
-
-    public String getChannelID() {
-        return channelID;
-    }
-
-    public void setChannelID(String channelID) {
-        this.channelID = channelID;
-    }
-
-    public NotificationChannel getAlarmNotificationChannel() {
-        return alarmNotificationChannel;
-    }
-
-    public void setAlarmNotificationChannel(NotificationChannel alarmNotificationChannel) {
-        this.alarmNotificationChannel = alarmNotificationChannel;
     }
 
     @Override

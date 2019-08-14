@@ -43,8 +43,8 @@ public class AlarmClockAdapter extends RecyclerView.Adapter<AlarmClockAdapter.Al
         notifyDataSetChanged();
     }
 
-    public void addItems() {
-        alarmClocks.addAll(ApplicationStorage.getAlarmClocks());
+    public void refreshAlarmClocks() {
+        alarmClocks = ApplicationStorage.getAlarmClocks();
         notifyDataSetChanged();
     }
 
@@ -62,6 +62,9 @@ public class AlarmClockAdapter extends RecyclerView.Adapter<AlarmClockAdapter.Al
         notifyItemChanged(curAlarmPosition);
     }
 
+    public int getCurAlarmPosition() {
+        return curAlarmPosition;
+    }
 
     @NonNull
     @Override
@@ -89,6 +92,7 @@ public class AlarmClockAdapter extends RecyclerView.Adapter<AlarmClockAdapter.Al
         private LinearLayout alarmLayout;
         private TextView alarmTime;
         private TextView alarmName;
+        private TextView alarmDayPart;
         private TextView alarmDaysOfTheWeek;
 
         private Switch alarmSwitch;
@@ -98,6 +102,7 @@ public class AlarmClockAdapter extends RecyclerView.Adapter<AlarmClockAdapter.Al
             super(itemView);
             alarmTime = itemView.findViewById(R.id.alarm_clock_chosen_time);
             alarmName = itemView.findViewById(R.id.alarm_clock_name);
+            alarmDayPart = itemView.findViewById(R.id.alarm_clock_chosen_day_part);
             alarmDaysOfTheWeek = itemView.findViewById(R.id.alarm_clock_days_of_the_week);
             alarmSwitch = itemView.findViewById(R.id.alarm_clock_switch_btn);
             alarmLayout = itemView.findViewById(R.id.ll_alarm_clock_recyclerview_fragment);
@@ -108,11 +113,22 @@ public class AlarmClockAdapter extends RecyclerView.Adapter<AlarmClockAdapter.Al
         {
             String time = String.format(Locale.ENGLISH, "%02d : %02d", alarmClock.getHours(), alarmClock.getMinutes());
 
-            if(!alarmClock.isIs24HourFormat())
-                time = time + " " + alarmClock.getDayPart();
-
             alarmTime.setText(time);
             alarmName.setText(alarmClock.getDescription());
+
+            if(!alarmClock.isIs24HourFormat())
+            {
+                alarmDayPart.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                alarmDayPart.setVisibility(View.VISIBLE);
+                alarmDayPart.setText(alarmClock.getDayPartToString());
+            }
+            else
+            {
+                alarmDayPart.setVisibility(View.INVISIBLE);
+                alarmDayPart.setHeight(0);
+                alarmDayPart.setWidth(0);
+
+            }
             setAlarmDaysOfTheWeek(alarmClock.getChosenDays());
 
             if(alarmClock.isAlive())
@@ -179,8 +195,6 @@ public class AlarmClockAdapter extends RecyclerView.Adapter<AlarmClockAdapter.Al
 
         private void shareBtnLogic() {
             shareBtn.setOnClickListener(view -> {
-                /*DayChooseDialog dayChooseDialog = new DayChooseDialog();
-                dayChooseDialog.show(getSupportFragmentManager(), ConstantsForApp.DAY_DIALOG_TAG);*/
                 alarmClockCallBack.onSharePress(alarmTime.getText().toString());
             });
         }

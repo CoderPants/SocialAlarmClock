@@ -56,4 +56,7 @@ public class ConstantsForApp {
             "Hello, guys! I set the alarm clock to : ";
     public static final String VK_END_OF_POST_MESSAGE = " see you later!";
 
+
+    public static final String CHANNEL_ID = "NOTIFICATION_CHANNEL_ONLY_ONE";
+
 }

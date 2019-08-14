@@ -1,10 +1,14 @@
 package com.donteco.alarmClock;
 
+import android.app.AlarmManager;
 import android.app.Application;
+import android.app.NotificationManager;
 import android.util.Log;
 
+import com.donteco.alarmClock.alarmclock.AlarmClockManager;
 import com.donteco.alarmClock.help.ApplicationStorage;
 import com.donteco.alarmClock.help.ConstantsForApp;
+import com.donteco.alarmClock.notification.NotificationManagingHelper;
 import com.vk.api.sdk.VK;
 
 import org.json.JSONException;
@@ -32,22 +36,15 @@ public class AlarmClockApplication extends Application {
                     "In application onCreate. Json exception by creating empty social network users", e);
         }
 
-        try{
-            ApplicationStorage.getVkAccessTokenFromStorage();
-        }
-        catch (JSONException e){
-            Log.i(ConstantsForApp.LOG_TAG,
-                    "In application onCreate. Json exception by creating empty vk access token", e);
-        }
-
-        try{
-            ApplicationStorage.getFbAccessTokenFromStorage();
-        }
-        catch (JSONException e){
-            Log.i(ConstantsForApp.LOG_TAG,
-                    "In application onCreate. Json exception by creating empty fb access token", e);
-        }
+        //Vk have stock serialization method
+        ApplicationStorage.getVkAccessTokenFromStorage();
 
         VK.initialize(getApplicationContext());
+
+        //For showing notification
+        NotificationManagingHelper.createInstance(getSystemService(NotificationManager.class));
+
+        //For alarm execute
+        AlarmClockManager.setInstance((AlarmManager)getSystemService(ALARM_SERVICE));
     }
 }

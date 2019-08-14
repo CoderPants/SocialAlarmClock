@@ -1,6 +1,7 @@
 package com.donteco.alarmClock.fragments;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,8 +28,12 @@ import com.donteco.alarmClock.alarm.AlarmClock;
 import com.donteco.alarmClock.alarm.DayPart;
 import com.donteco.alarmClock.adapters.AlarmClockAdapter;
 import com.donteco.alarmClock.dialogs.SocialNetworkChooseDialog;
+import com.donteco.alarmClock.alarmclock.AlarmClockManager;
+import com.donteco.alarmClock.alarmclock.AlarmClockReceiver;
 import com.donteco.alarmClock.help.ApplicationStorage;
 import com.donteco.alarmClock.help.ConstantsForApp;
+import com.donteco.alarmClock.help.KeysForIntents;
+import com.donteco.alarmClock.notification.NotificationBuilder;
 import com.donteco.alarmClock.socialNetwork.VkWallRequest;
 import com.facebook.AccessToken;
 import com.facebook.share.model.SharePhoto;
@@ -50,6 +56,9 @@ public class AlarmClockFragment extends Fragment {
     private Activity activity;
     private AlarmClockAdapter alarmClockAdapter;
 
+    //private NotificationManager manager;
+    private NotificationManagerCompat managerCompat;
+    private NotificationBuilder builder;
 
     //HEY YOU!
     private String timeForSharing;
@@ -60,6 +69,11 @@ public class AlarmClockFragment extends Fragment {
 
         try {
             activity = getActivity();
+            managerCompat = NotificationManagerCompat.from(getContext());
+            builder = new NotificationBuilder();
+            //We need only one
+            builder.createNotificationChanel();
+
             return inflater.inflate(R.layout.alarm_clock_fragment, container, false);
         }
         catch (Exception e) {
@@ -130,7 +144,7 @@ public class AlarmClockFragment extends Fragment {
                     break;
 
                 case ConstantsForApp.DELETE_ALARM_REQUEST:
-                    alarmClockAdapter.addItems();
+                    alarmClockAdapter.refreshAlarmClocks();
                     break;
 
                 case ConstantsForApp.ALARM_CHANGE_INFO_REQUEST:
@@ -256,13 +270,129 @@ public class AlarmClockFragment extends Fragment {
         AlarmClock alarmClock =  new AlarmClock(hours, minutes, chosenDays,
                 songLocation, vibration, description, duration, is24HourFormat, dayPart);
 
-        /*alarmClock.setChannelID(hours + " " + minutes);
-        alarmClock.createNotificationChannel();
 
-        NotificationManager notificationManager = getContext().getSystemService(NotificationManager.class);
-        notificationManager.createNotificationChannel(alarmClock.getAlarmNotificationChannel());*/
+        setAlarmClock(alarmClock);
+        //calendar.set(Calendar.DAY_OF_WEEK,Calendar);
+
+        //createNotification(alarmClock);
 
         return alarmClock;
     }
+
+    private void setAlarmClock(AlarmClock alarmClock)
+    {
+        Calendar calendar = Calendar.getInstance();
+
+        int hours = alarmClock.getHours();
+        int minutes = alarmClock.getMinutes();
+        boolean[] chosenDays = alarmClock.getChosenDays();
+        boolean is24Hour = alarmClock.isIs24HourFormat();
+        DayPart dayPart = alarmClock.getDayPart();
+
+        int curHours = calendar.get(Calendar.HOUR_OF_DAY);
+        int curMinutes = calendar.get(Calendar.MINUTE);
+
+        //check this shit!
+        if(!is24Hour && dayPart == DayPart.PM)
+            hours += 12;
+
+
+        int curDay = calendar.get(Calendar.DAY_OF_WEEK);
+        int nextAlarmDay = curDay;
+        boolean noRepeatDays = true;
+
+        //If user choose smth and this is not curDay
+        for (int i = 0; i < chosenDays.length; i++)
+            if(chosenDays[i] && (i+1) != curDay)
+            {
+                nextAlarmDay = i+1;
+                noRepeatDays = false;
+            }
+
+        //If user choose cur time and there is no chosen days
+        if(curHours >= hours && curMinutes >= minutes && noRepeatDays)
+            ++nextAlarmDay;
+
+        System.out.println("Calendar info " + hours + " " + minutes + " " + nextAlarmDay + " song uri " + alarmClock.getAlarmClockMusicLocation() + " duration " + alarmClock.getDuration() + " hsVibration " + alarmClock.hasVibration());
+
+        calendar.set(Calendar.HOUR_OF_DAY, hours);
+        calendar.set(Calendar.MINUTE, minutes);
+        calendar.set(Calendar.DAY_OF_WEEK, nextAlarmDay);
+        calendar.set(Calendar.SECOND, 1);
+        calendar.set(Calendar.MILLISECOND, 1);
+
+        System.out.println("Passed set calendar");
+        Intent startAlarmClockIntent = new Intent(getContext(), AlarmClockReceiver.class);
+        startAlarmClockIntent.putExtra(KeysForIntents.ALARM_CLOCK_MUSIC, alarmClock.getAlarmClockMusicLocation());
+        startAlarmClockIntent.putExtra(KeysForIntents.ALARM_CLOCK_DURATION, alarmClock.getDuration());
+        startAlarmClockIntent.putExtra(KeysForIntents.ALARM_CLOCK_VIBRATION, alarmClock.hasVibration());
+
+        System.out.println("Passed set startIntent");
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(),
+                0, startAlarmClockIntent, 0);
+
+        System.out.println("Passed pending intent creation ");
+
+        AlarmClockManager.setExtact(calendar.getTimeInMillis(), pendingIntent);
+
+        System.out.println("Passed alarm clock");
+        /*calendar.set(Calendar.MINUTE, alarmClock.getMinutes());
+        calendar.set(Calendar.HOUR_OF_DAY, alarmClock.getHours());*/
+
+
+       /* boolean notChecked = true;
+
+        for (int i = 0; i < chosenDays.length; i++)
+            if(chosenDays[i])
+            {
+                calendar.set(Calendar.DAY_OF_WEEK, i+1);
+                notChecked = false;
+            }
+
+        if(notChecked)
+            calendar.set( Calendar.DAY_OF_WEEK, calendar.get(Calendar.DAY_OF_WEEK) + 1 );*/
+
+    }
+
+    /*private void createNotification(AlarmClock alarmClock)
+    {
+        Intent activityIntent = new Intent(getContext(), MainActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 0, activityIntent, 0);
+
+        Intent broadcastIntent = new Intent(getContext(), NotificationReceiver.class);
+        broadcastIntent.putExtra("message", "in pending intent");
+        PendingIntent actionIntent = PendingIntent.getBroadcast(getContext(), 0,
+                broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Uri uri;
+        String alarmClockMusic = alarmClock.getAlarmClockMusicLocation();
+
+        if(alarmClockMusic == null)
+            uri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"+
+                    getApplicationContext().getPackageName() + "/" + R.raw.alarm_cock_standart_music);
+        else
+            uri = Uri.parse(alarmClockMusic);
+
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(activity.getApplicationContext(), ConstantsForApp.CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_access_alarm_black_24dp)
+                .setWhen(System.currentTimeMillis() + 6000)
+                .setContentTitle("Alarm clock")
+                .setContentText("Time " + alarmClock.getHours() + " " + alarmClock.getMinutes())
+                .setContentIntent(contentIntent)
+                .addAction(R.mipmap.ic_launcher, "Toast", actionIntent)
+                .setAutoCancel(true);
+
+        *//*if(alarmClock.hasVibration())
+        {
+            long[] vibrationPattern = new long[alarmClock.getDuration()*60000];
+            Arrays.fill(vibrationPattern, 1000);
+
+            builder.setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 });
+        }*//*
+
+        managerCompat.notify(alarmClockAdapter.getCurAlarmPosition(), builder.build());
+    }*/
 
 }

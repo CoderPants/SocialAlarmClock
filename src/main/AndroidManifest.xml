@@ -4,7 +4,8 @@
     package="com.donteco.alarmClock">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
 
@@ -17,7 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activities.DeleteAlarmsActivity"/>
+        <activity android:name=".activities.AlarmClockPlayerActivity"></activity>
+        <activity android:name=".activities.DeleteAlarmsActivity" />
         <activity android:name=".activities.ChooseAlarmClockActivity" />
         <activity android:name=".activities.MainActivity">
             <intent-filter>
@@ -27,29 +29,33 @@
             </intent-filter>
         </activity>
 
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges= "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
-        <activity android:name="com.facebook.CustomTabActivity"
-        android:exported="true">
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
 
-        <provider android:authorities="com.facebook.app.FacebookContentProvider2466571820032251"
+        <provider
             android:name="com.facebook.FacebookContentProvider"
-            android:exported="true"/>
-
-
-        <!--For notification handling-->
-        <receiver android:name=".notification.NotificationReceiver"/>
+            android:authorities="com.facebook.app.FacebookContentProvider2466571820032251"
+            android:exported="true" /> <!-- For notification handling -->
+        <receiver android:name=".notification.NotificationReceiver" /> <!-- For alarm clock execute -->
+        <receiver android:name=".alarmclock.AlarmClockReceiver" />
     </application>
 
 </manifest>

@@ -7,25 +7,19 @@ import androidx.core.app.NotificationManagerCompat;
 
 public class NotificationManagingHelper {
 
-    private NotificationManagingHelper manager;
+    //private NotificationManagingHelper manager;
+    private static NotificationManager notificationManager;
 
-    private NotificationManagerCompat notificationManagerCompat;
-    private NotificationManager notificationManager;
-    private Context context;
-
-    private NotificationManagingHelper(Context context) {
-        notificationManagerCompat = NotificationManagerCompat.from(context);
-        notificationManager = context.getSystemService(NotificationManager.class);
+    private NotificationManagingHelper() {
 
     }
 
-    /*public static void createInstance(Context context) {
-        if(manager == null)
-            manager = new NotificationManagingHelper(context);
-    }*/
+    public static void createInstance(NotificationManager manager) {
+        if(notificationManager == null)
+            notificationManager = manager;
+    }
 
-    public static void setNotificationChannel(String channelId, int notificationID)
-    {
-        //Notification notification = new NotificationCompat.Builder()
+    public static NotificationManager getNotificationManager(){
+        return notificationManager;
     }
 }
