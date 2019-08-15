@@ -10,6 +10,9 @@ import java.util.Objects;
 public class AlarmClock
 {
 
+    //ID for alarmClock manager
+    private int id;
+
     private int hours;
     private int minutes;
     private boolean[] chosenDays;
@@ -27,6 +30,7 @@ public class AlarmClock
                       String alarmClockMusicLocation, boolean vibration, String description,
                       int duration, boolean is24HourFormat, DayPart dayPart)
     {
+        id = createID();
         this.hours = hours;
         this.minutes = minutes;
         this.chosenDays = chosenDays;
@@ -39,9 +43,18 @@ public class AlarmClock
         this.alive = true;
     }
 
-
     public int getHours() {
         return hours;
+    }
+
+    //I guess it'll fit
+    //From 5000 to 10000
+    private int createID() {
+        return (int)(Math.random() * 10000 + 5000);
+    }
+
+    public int getId() {
+        return id;
     }
 
     public void setHours(int hours) {

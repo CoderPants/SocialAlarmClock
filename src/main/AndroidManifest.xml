@@ -53,9 +53,9 @@
         <provider
             android:name="com.facebook.FacebookContentProvider"
             android:authorities="com.facebook.app.FacebookContentProvider2466571820032251"
-            android:exported="true" /> <!-- For notification handling -->
-        <receiver android:name=".notification.NotificationReceiver" /> <!-- For alarm clock execute -->
-        <receiver android:name=".alarmclock.AlarmClockReceiver" />
+            android:exported="true" />
+        <!-- For notification handling -->
+        <receiver android:name=".notification.NotificationReceiver" />
     </application>
 
 </manifest>

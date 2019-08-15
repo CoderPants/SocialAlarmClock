@@ -22,14 +22,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.donteco.alarmClock.R;
+import com.donteco.alarmClock.activities.AlarmClockPlayerActivity;
 import com.donteco.alarmClock.activities.ChooseAlarmClockActivity;
 import com.donteco.alarmClock.activities.DeleteAlarmsActivity;
 import com.donteco.alarmClock.alarm.AlarmClock;
 import com.donteco.alarmClock.alarm.DayPart;
 import com.donteco.alarmClock.adapters.AlarmClockAdapter;
+import com.donteco.alarmClock.background.AlarmClockManager;
 import com.donteco.alarmClock.dialogs.SocialNetworkChooseDialog;
-import com.donteco.alarmClock.alarmclock.AlarmClockManager;
-import com.donteco.alarmClock.alarmclock.AlarmClockReceiver;
 import com.donteco.alarmClock.help.ApplicationStorage;
 import com.donteco.alarmClock.help.ConstantsForApp;
 import com.donteco.alarmClock.help.KeysForIntents;
@@ -139,7 +139,9 @@ public class AlarmClockFragment extends Fragment {
         {
             switch (requestCode) {
                 case ConstantsForApp.ALARM_GET_INFO_REQUEST:
-                    alarmClockAdapter.addItem(convertToAlarmClock(data));
+                    AlarmClock newAlarm = convertToAlarmClock(data);
+                    alarmClockAdapter.addItem(newAlarm);
+                    startAlarmClock(newAlarm);
                     //System.out.println("In alarm add result " + alarmClockAdapter.getItemCount() + " "+ data);
                     break;
 
@@ -152,13 +154,7 @@ public class AlarmClockFragment extends Fragment {
                     break;
 
                 case ConstantsForApp.SHARE_DIALOG_SHOW_REQUEST:
-                    boolean [] checkedSocialNetwork = data.getBooleanArrayExtra("Checked_networks");
-
-                    for (boolean b : checkedSocialNetwork) {
-                        System.out.println("Checked socialNetworks " + b);
-                    }
-
-                    share(checkedSocialNetwork);
+                    share(data.getBooleanArrayExtra("Checked_networks"));
                     break;
             }
         }
@@ -234,7 +230,6 @@ public class AlarmClockFragment extends Fragment {
 
         ShareDialog shareFaceBook = new ShareDialog(this);
 
-        System.out.println("Can show " + shareFaceBook.canShow(content, ShareDialog.Mode.AUTOMATIC));
 
         if(shareFaceBook.canShow(content, ShareDialog.Mode.AUTOMATIC))
             shareFaceBook.show(content);
@@ -270,89 +265,26 @@ public class AlarmClockFragment extends Fragment {
         AlarmClock alarmClock =  new AlarmClock(hours, minutes, chosenDays,
                 songLocation, vibration, description, duration, is24HourFormat, dayPart);
 
-
-        setAlarmClock(alarmClock);
-        //calendar.set(Calendar.DAY_OF_WEEK,Calendar);
-
-        //createNotification(alarmClock);
-
         return alarmClock;
     }
 
-    private void setAlarmClock(AlarmClock alarmClock)
+    private void startAlarmClock(AlarmClock alarmClock)
     {
-        Calendar calendar = Calendar.getInstance();
+        int alarmIndex = ApplicationStorage.getAlarmClocks().indexOf(alarmClock);
 
-        int hours = alarmClock.getHours();
-        int minutes = alarmClock.getMinutes();
-        boolean[] chosenDays = alarmClock.getChosenDays();
-        boolean is24Hour = alarmClock.isIs24HourFormat();
-        DayPart dayPart = alarmClock.getDayPart();
-
-        int curHours = calendar.get(Calendar.HOUR_OF_DAY);
-        int curMinutes = calendar.get(Calendar.MINUTE);
-
-        //check this shit!
-        if(!is24Hour && dayPart == DayPart.PM)
-            hours += 12;
-
-
-        int curDay = calendar.get(Calendar.DAY_OF_WEEK);
-        int nextAlarmDay = curDay;
-        boolean noRepeatDays = true;
-
-        //If user choose smth and this is not curDay
-        for (int i = 0; i < chosenDays.length; i++)
-            if(chosenDays[i] && (i+1) != curDay)
-            {
-                nextAlarmDay = i+1;
-                noRepeatDays = false;
-            }
-
-        //If user choose cur time and there is no chosen days
-        if(curHours >= hours && curMinutes >= minutes && noRepeatDays)
-            ++nextAlarmDay;
-
-        System.out.println("Calendar info " + hours + " " + minutes + " " + nextAlarmDay + " song uri " + alarmClock.getAlarmClockMusicLocation() + " duration " + alarmClock.getDuration() + " hsVibration " + alarmClock.hasVibration());
-
-        calendar.set(Calendar.HOUR_OF_DAY, hours);
-        calendar.set(Calendar.MINUTE, minutes);
-        calendar.set(Calendar.DAY_OF_WEEK, nextAlarmDay);
-        calendar.set(Calendar.SECOND, 1);
-        calendar.set(Calendar.MILLISECOND, 1);
-
-        System.out.println("Passed set calendar");
-        Intent startAlarmClockIntent = new Intent(getContext(), AlarmClockReceiver.class);
+        Intent startAlarmClockIntent = new Intent(getContext(), AlarmClockPlayerActivity.class);
         startAlarmClockIntent.putExtra(KeysForIntents.ALARM_CLOCK_MUSIC, alarmClock.getAlarmClockMusicLocation());
         startAlarmClockIntent.putExtra(KeysForIntents.ALARM_CLOCK_DURATION, alarmClock.getDuration());
         startAlarmClockIntent.putExtra(KeysForIntents.ALARM_CLOCK_VIBRATION, alarmClock.hasVibration());
+        startAlarmClockIntent.putExtra(KeysForIntents.ALARM_CLOCK_INDEX, alarmIndex);
 
-        System.out.println("Passed set startIntent");
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(),
-                0, startAlarmClockIntent, 0);
-
-        System.out.println("Passed pending intent creation ");
-
-        AlarmClockManager.setExtact(calendar.getTimeInMillis(), pendingIntent);
-
-        System.out.println("Passed alarm clock");
-        /*calendar.set(Calendar.MINUTE, alarmClock.getMinutes());
-        calendar.set(Calendar.HOUR_OF_DAY, alarmClock.getHours());*/
+        //Cancel or update?
+        PendingIntent alarmExecuteIntent = PendingIntent.getActivity(activity, alarmClock.getId(),
+                startAlarmClockIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
 
-       /* boolean notChecked = true;
-
-        for (int i = 0; i < chosenDays.length; i++)
-            if(chosenDays[i])
-            {
-                calendar.set(Calendar.DAY_OF_WEEK, i+1);
-                notChecked = false;
-            }
-
-        if(notChecked)
-            calendar.set( Calendar.DAY_OF_WEEK, calendar.get(Calendar.DAY_OF_WEEK) + 1 );*/
-
+        AlarmClockManager.getNextAlarmExecuteTime(alarmClock);
+        //AlarmClockManager.setExact(AlarmClockManager.getNextAlarmExecuteTime(alarmClock), alarmExecuteIntent);
     }
 
     /*private void createNotification(AlarmClock alarmClock)

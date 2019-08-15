@@ -18,6 +18,9 @@ public class ConstantsForApp {
     public static final int VK_LOGGING_REQUEST_CODE = 282;
     public static final int FACEBOOK_LOGIN_CODE = 64206;
     public static final int MUSIC_NAME_LENGTH = 10;
+    public static final int MUSIC_FADEIN_DUTATION_MS = 10000;
+    public static final int MUSIC_MUSIC_PAUSE = 100;
+    public static final float MUSIC_FADEIN_VOLUME_INCREASE = 0.1f;
 
     public static final DayOfWeek[] DAYS_LIST = new DayOfWeek[] {
             DayOfWeek.MONDAY,

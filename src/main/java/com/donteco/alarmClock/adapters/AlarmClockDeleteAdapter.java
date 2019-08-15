@@ -13,18 +13,19 @@ import com.donteco.alarmClock.R;
 import com.donteco.alarmClock.alarm.AlarmClock;
 import com.donteco.alarmClock.help.ApplicationStorage;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 public class AlarmClockDeleteAdapter extends RecyclerView.Adapter<AlarmClockDeleteAdapter.AlarmClockDeleteViewHolder>
 {
     private List<AlarmClock> alarmClocks;
-    private DeleteCallBack deleteCallBack;
+    //private DeleteCallBack deleteCallBack;
 
-    public AlarmClockDeleteAdapter(DeleteCallBack deleteCallBack) {
-        this.deleteCallBack = deleteCallBack;
+    public AlarmClockDeleteAdapter() {
+        //this.deleteCallBack = deleteCallBack;
 
-        alarmClocks = ApplicationStorage.getAlarmClocks();
+        alarmClocks = new ArrayList<>(ApplicationStorage.getAlarmClocks());
         notifyDataSetChanged();
     }
 
@@ -78,7 +79,7 @@ public class AlarmClockDeleteAdapter extends RecyclerView.Adapter<AlarmClockDele
             alarmName.setText(alarmClock.getDescription());
             deleteAlarmBtn.setOnClickListener(view ->
             {
-                deleteCallBack.deleteNotification(alarmClock);
+                //deleteCallBack.deleteNotification(alarmClock);
                 alarmClocks.remove(alarmClock);
                 notifyItemRemoved(getAdapterPosition());
             });
@@ -86,8 +87,8 @@ public class AlarmClockDeleteAdapter extends RecyclerView.Adapter<AlarmClockDele
 
     }
 
-    public interface DeleteCallBack
+    /*public interface DeleteCallBack
     {
         void deleteNotification(AlarmClock alarmClock);
-    }
+    }*/
 }

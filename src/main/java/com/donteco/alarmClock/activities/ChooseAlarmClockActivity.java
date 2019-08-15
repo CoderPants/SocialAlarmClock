@@ -104,9 +104,9 @@ public class ChooseAlarmClockActivity extends AppCompatActivity
         setNumberPickers(maxHours, minHours);
 
         Intent alarmClockInfo = getIntent();
-        int alarmClockPosition = alarmClockInfo.getIntExtra("Alarm clock position", Integer.MAX_VALUE);
+        int alarmClockPosition = alarmClockInfo.getIntExtra("Alarm clock alarmClockPosition", Integer.MAX_VALUE);
 
-        System.out.println("Alarm clock position " + alarmClockPosition);
+        System.out.println("Alarm clock alarmClockPosition " + alarmClockPosition);
         if(alarmClockPosition == Integer.MAX_VALUE)
             logicForAddingAlarmClock();
         else
@@ -151,7 +151,7 @@ public class ChooseAlarmClockActivity extends AppCompatActivity
 
     private void logicForAddingAlarmClock()
     {
-        System.out.println("Alarm clock position passed !");
+        System.out.println("Alarm clock alarmClockPosition passed !");
         Calendar curTime = Calendar.getInstance();
         int hours = curTime.get(Calendar.HOUR);
         int minutes = curTime.get(Calendar.MINUTE);

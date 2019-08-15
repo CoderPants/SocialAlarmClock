@@ -5,7 +5,7 @@ import android.app.Application;
 import android.app.NotificationManager;
 import android.util.Log;
 
-import com.donteco.alarmClock.alarmclock.AlarmClockManager;
+import com.donteco.alarmClock.background.AlarmClockManager;
 import com.donteco.alarmClock.help.ApplicationStorage;
 import com.donteco.alarmClock.help.ConstantsForApp;
 import com.donteco.alarmClock.notification.NotificationManagingHelper;

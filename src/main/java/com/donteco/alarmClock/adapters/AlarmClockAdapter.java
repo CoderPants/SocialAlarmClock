@@ -127,12 +127,13 @@ public class AlarmClockAdapter extends RecyclerView.Adapter<AlarmClockAdapter.Al
                 alarmDayPart.setVisibility(View.INVISIBLE);
                 alarmDayPart.setHeight(0);
                 alarmDayPart.setWidth(0);
-
             }
             setAlarmDaysOfTheWeek(alarmClock.getChosenDays());
 
             if(alarmClock.isAlive())
                 alarmSwitch.setChecked(true);
+            else
+                alarmSwitch.setChecked(false);
 
             layoutLogic();
             switchLogic();
@@ -174,15 +175,17 @@ public class AlarmClockAdapter extends RecyclerView.Adapter<AlarmClockAdapter.Al
 
         private void layoutLogic()
         {
-            alarmLayout.setOnLongClickListener(view -> {
+            alarmLayout.setOnLongClickListener(view ->
+            {
                 alarmClockCallBack.onLongPress();
                 return false;
             });
 
-            alarmLayout.setOnClickListener(view -> {
-                        curAlarmPosition = getAdapterPosition();
-                        alarmClockCallBack.onPress(curAlarmPosition);
-                    });
+            alarmLayout.setOnClickListener(view ->
+            {
+                curAlarmPosition = getAdapterPosition();
+                alarmClockCallBack.onPress(curAlarmPosition);
+            });
         }
 
         private void switchLogic()

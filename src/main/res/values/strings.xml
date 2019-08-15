@@ -35,4 +35,7 @@
     <string name="fb_login_protocol_scheme">fb2466571820032251</string>
 
 
+    <string name="alarm_clock_player_swipe">Turn off</string>
+
+
 </resources>
