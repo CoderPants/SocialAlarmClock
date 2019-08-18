@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/recycler_view_elem_padding">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="@dimen/recycler_view_elem_margin_bottom_for_line"
+        >
+
+        <ImageView
+            android:id="@+id/iv_share_alarm_clock_recyclerview_fragment"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@color/white80"
+            android:scaleType="fitXY"
+            android:src = "@drawable/share_icon"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="@dimen/alarm_widget_margin_end"
+            />
+
+
+        <LinearLayout
+            android:id="@+id/ll_alarm_clock_recyclerview_fragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/recycler_view_element_background">
+
+            <TextView
+                android:id="@+id/alarm_clock_chosen_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|start"
+                android:fontFamily="@string/text_style"
+                android:textSize="@dimen/alarm_widget_text_size_for_time"
+                android:textAlignment="center"
+                android:textColor="@color/black95"
+                android:layout_marginBottom="@dimen/add_alarm_element_tv_margin_bottom"/>
+
+            <TextView
+                android:id="@+id/alarm_clock_chosen_day_part"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_gravity="center_horizontal|start"
+                android:fontFamily="@string/text_style"
+                android:textSize="@dimen/alarm_widget_text_size_for_day_part"
+                android:textAlignment="center"
+                android:textColor="@color/black95"
+                android:layout_marginBottom="@dimen/add_alarm_element_tv_margin_bottom"/>
+
+            <TextView
+                android:id="@+id/alarm_clock_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|start"
+                android:fontFamily="@string/text_style"
+                android:textSize="@dimen/alarm_widget_text_size_for_name"
+                android:textAlignment="center"
+                android:textColor="@color/black95"
+                android:layout_marginBottom="@dimen/add_alarm_element_tv_margin_bottom"/>
+
+            <TextView
+                android:id="@+id/alarm_clock_days_of_the_week"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|start"
+                android:fontFamily="@string/text_style"
+                android:textSize="@dimen/add_alarm_element_text_size_for_days"
+                android:textAlignment="center"
+                android:textColor="@color/black95"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+    <Switch
+        android:id="@+id/alarm_clock_switch_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|end"
+        android:theme="@style/SwitchTheme"
+        android:paddingTop = "@dimen/add_alarm_element_switch_padding_top"
+        />
+
+    <View
+        android:id="@+id/bottom_border"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/recycler_view_line_height"
+        android:background="@color/black95"
+        android:layout_gravity="bottom" />
+
+</FrameLayout>
