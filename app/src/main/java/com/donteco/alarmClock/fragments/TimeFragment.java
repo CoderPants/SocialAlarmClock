@@ -55,8 +55,10 @@ public class TimeFragment extends Fragment {
         {
             currentTimeTV.setText("");
             timer.cancel();
+            timer.purge();
             timer = null;
         }
+        Log.i(ConstantsForApp.LOG_TAG, "Timer stopped");
 
         super.onPause();
     }
@@ -64,8 +66,9 @@ public class TimeFragment extends Fragment {
     //For timer resuming
     @Override
     public void onResume() {
-
         showCurrentTime();
+
+        Log.i(ConstantsForApp.LOG_TAG, "Timer resumed");
         super.onResume();
     }
 
@@ -79,9 +82,9 @@ public class TimeFragment extends Fragment {
         {
             currentTimeTV.setText("");
             timer.cancel();
+            timer.purge();
             timer = null;
             Log.i(ConstantsForApp.LOG_TAG, "In onDestroy view. Timer instance has been destroyed ");
-            System.out.println("In onDestroy view. Timer instance has been destroyed " + timer);
         }
 
         super.onDestroyView();

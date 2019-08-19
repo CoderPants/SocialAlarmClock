@@ -113,6 +113,7 @@ public class AlarmClockFragment extends Fragment {
                 dayChooseDialog.setTargetFragment(AlarmClockFragment.this,
                         FlagsForIntents.SHARE_DIALOG_SHOW_REQUEST);
 
+                assert getFragmentManager() != null;
                 dayChooseDialog.show(getFragmentManager(), ConstantsForApp.SOCIAL_NETWORK_TAG);
             }
 
@@ -182,6 +183,7 @@ public class AlarmClockFragment extends Fragment {
 
 
     //Need to fix it
+    //Really bad handling
     private void share(boolean[] checkedSocialNetwork)
     {
         VKAccessToken vkAccessToken = ApplicationStorage.getVkAccessToken();
@@ -189,23 +191,18 @@ public class AlarmClockFragment extends Fragment {
 
         if(checkedSocialNetwork.length == ConstantsForApp.AMOUNT_OF_SOCIAL_NETWORKS)
         {
-            if(checkedSocialNetwork[0])
-                VKShare();
-
-
-            if(checkedSocialNetwork[1])
-                FBShare();
+            VKShare();
+            FBShare();
         }
         else
         {
-            if(checkedSocialNetwork[0])
-            {
-                if(vkAccessToken != null && vkAccessToken.isValid())
-                    VKShare();
+            //We get only single element array
+            //Don't know how to handle multiples socials
+            if(VK.isLoggedIn() && vkAccessToken != null && vkAccessToken.isValid())
+                VKShare();
 
-                if(fbAccessToken != null && !fbAccessToken.isExpired())
-                    FBShare();
-            }
+            if(fbAccessToken != null && !fbAccessToken.isExpired())
+                FBShare();
         }
     }
 

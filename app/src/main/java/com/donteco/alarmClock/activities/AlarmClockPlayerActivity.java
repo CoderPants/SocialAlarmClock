@@ -48,7 +48,8 @@ public class AlarmClockPlayerActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String songLocation = intent.getStringExtra(KeysForIntents.ALARM_CLOCK_MUSIC);
-        //Getting time in min
+
+        //Converting ms to min
         int duration = intent.getIntExtra(KeysForIntents.ALARM_CLOCK_DURATION, 1) * 60000;
         boolean hasVibration = intent.getBooleanExtra(KeysForIntents.ALARM_CLOCK_VIBRATION, true);
         alarmClockPosition = intent.getIntExtra(KeysForIntents.ALARM_CLOCK_INDEX, -1);
@@ -61,7 +62,7 @@ public class AlarmClockPlayerActivity extends AppCompatActivity {
 
         if(hasVibration)
         {
-            vibrator =  (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             setVibrator(duration);
         }
 
@@ -82,6 +83,7 @@ public class AlarmClockPlayerActivity extends AppCompatActivity {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
 
         AlarmClock alarmClock = ApplicationStorage.getAlarmClocks().get(alarmClockPosition);
+
         String time = String.format(Locale.ENGLISH, "%02d : %02d", alarmClock.getHours(), alarmClock.getMinutes());
         String notificationTitle = "Alarm clock : " + time +" has fired!";
 
@@ -108,10 +110,8 @@ public class AlarmClockPlayerActivity extends AppCompatActivity {
         boolean[] chosenDays = curAlarmClock.getChosenDays();
 
         for (boolean chosenDay : chosenDays)
-        {
             if(chosenDay)
                 noRepeat = false;
-        }
 
 
         if(noRepeat)
@@ -143,7 +143,10 @@ public class AlarmClockPlayerActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && vibrator != null)
             vibrator.vibrate(VibrationEffect.createWaveform(vibrationPattern, 0));
         else
+        {
+            assert vibrator!= null;
             vibrator.vibrate(duration);
+        }
     }
 
     private class AudioPlayer implements Runnable
@@ -180,6 +183,7 @@ public class AlarmClockPlayerActivity extends AppCompatActivity {
             {
                 while (isPlaying && curMusicDuration != userChooseDurationMS)
                 {
+                    //Providing fade in effect
                     if(curMusicDuration <= ConstantsForApp.MUSIC_FADE_IN_DURATION_MS)
                     {
                         mediaPlayer.setVolume(curVolume, curVolume);
