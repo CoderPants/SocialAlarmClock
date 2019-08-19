@@ -1,12 +1,11 @@
 package com.donteco.alarmClock.adapters;
 
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,8 +13,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.donteco.alarmClock.R;
 import com.donteco.alarmClock.help.ApplicationStorage;
+import com.donteco.alarmClock.help.ConstantsForApp;
 import com.donteco.alarmClock.socialNetwork.SocialNetworkUser;
+import com.facebook.AccessToken;
 import com.squareup.picasso.Picasso;
+import com.vk.api.sdk.VK;
+import com.vk.api.sdk.auth.VKAccessToken;
 
 import java.util.List;
 
@@ -35,11 +38,12 @@ public class SocialNetworkAdapter extends RecyclerView.Adapter<SocialNetworkAdap
         users.set(position, socialNetworkUser);
         notifyItemChanged(position);
     }
+
+
     @NonNull
     @Override
     public SocialNetworkViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        System.out.println("Social media recyclerview element " + R.layout.social_media_recyclerview_element);
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.social_media_recyclerview_element, parent, false);
 
@@ -61,7 +65,8 @@ public class SocialNetworkAdapter extends RecyclerView.Adapter<SocialNetworkAdap
         private ImageView socialNetworkImage;
         private TextView socialNetworkName;
         private TextView socialNetworkUserName;
-        private FrameLayout frameLayout;
+        private LinearLayout linearLayout;
+        private ImageView socialNetworkExit;
 
         public SocialNetworkViewHolder(@NonNull View itemView)
         {
@@ -70,7 +75,8 @@ public class SocialNetworkAdapter extends RecyclerView.Adapter<SocialNetworkAdap
             socialNetworkImage = itemView.findViewById(R.id.social_media_iv_for_social_picture);
             socialNetworkName = itemView.findViewById(R.id.social_media_tv_for_name);
             socialNetworkUserName = itemView.findViewById(R.id.social_media_tv_for_user_info);
-            frameLayout = itemView.findViewById(R.id.social_media_fl_for_all_info);
+            linearLayout = itemView.findViewById(R.id.social_media_ll_for_user_info);
+            socialNetworkExit = itemView.findViewById(R.id.social_media_iv_exit);
         }
 
         private void bind(SocialNetworkUser socialNetworkUser)
@@ -93,12 +99,45 @@ public class SocialNetworkAdapter extends RecyclerView.Adapter<SocialNetworkAdap
             else
                 socialNetworkImage.setImageDrawable(socialNetworkCallBack.onNoAvatarCondition(getAdapterPosition()));
 
-            frameLayout.setOnClickListener(view -> socialNetworkCallBack.onPressed(socialNetworkUser));
+            //User can press even icon or linear layout with data
+            socialNetworkImage.setOnClickListener(view -> socialNetworkCallBack.onPressed(socialNetworkUser));
+            linearLayout.setOnClickListener(view -> socialNetworkCallBack.onPressed(socialNetworkUser));
+
+            socialNetworkExit.setOnClickListener(view -> socialNetworkCallBack.onExitPressed(getAdapterPosition()));
+
+            exitIconLogic();
+        }
+
+        private void exitIconLogic()
+        {
+            switch (getAdapterPosition())
+            {
+                case 0:
+                    VKAccessToken vkAccessToken = ApplicationStorage.getVkAccessToken();
+
+                    if(VK.isLoggedIn() && vkAccessToken != null && vkAccessToken.isValid())
+                        socialNetworkExit.setVisibility(View.VISIBLE);
+                    else
+                        socialNetworkExit.setVisibility(View.INVISIBLE);
+
+                    break;
+
+                case 1:
+                    AccessToken fbAccessToken = AccessToken.getCurrentAccessToken();
+
+                    if(fbAccessToken != null && !fbAccessToken.isExpired())
+                        socialNetworkExit.setVisibility(View.VISIBLE);
+                    else
+                        socialNetworkExit.setVisibility(View.INVISIBLE);
+
+                    break;
+            }
         }
     }
 
     public interface SocialNetworkCallBack {
         void onPressed(SocialNetworkUser socialNetworkUser);
+        void onExitPressed(int position);
         Drawable onNoAvatarCondition(int position);
     }
 }

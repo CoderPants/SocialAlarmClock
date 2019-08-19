@@ -8,6 +8,7 @@ import android.util.Log;
 import com.donteco.alarmClock.background.AlarmClockManager;
 import com.donteco.alarmClock.help.ApplicationStorage;
 import com.donteco.alarmClock.help.ConstantsForApp;
+import com.donteco.alarmClock.notification.NotificationBuilder;
 import com.donteco.alarmClock.notification.NotificationManagingHelper;
 import com.vk.api.sdk.VK;
 
@@ -28,6 +29,7 @@ public class AlarmClockApplication extends Application {
                     "In application onCreate. Json exception by creating empty alarm clocks", e);
         }
 
+        //Setting social network storage
         try {
             ApplicationStorage.getSocialNetworkUsersFormStorage();
         }
@@ -43,6 +45,7 @@ public class AlarmClockApplication extends Application {
 
         //For showing notification
         NotificationManagingHelper.createInstance(getSystemService(NotificationManager.class));
+        NotificationBuilder.createNotificationChanel();
 
         //For alarm execute
         AlarmClockManager.setInstance((AlarmManager)getSystemService(ALARM_SERVICE));

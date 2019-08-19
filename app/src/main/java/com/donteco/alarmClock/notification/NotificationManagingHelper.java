@@ -7,7 +7,6 @@ import androidx.core.app.NotificationManagerCompat;
 
 public class NotificationManagingHelper {
 
-    //private NotificationManagingHelper manager;
     private static NotificationManager notificationManager;
 
     private NotificationManagingHelper() {

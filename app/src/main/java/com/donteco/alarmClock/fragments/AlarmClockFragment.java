@@ -12,13 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,16 +24,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.donteco.alarmClock.R;
 import com.donteco.alarmClock.activities.ChooseAlarmClockActivity;
 import com.donteco.alarmClock.activities.DeleteAlarmsActivity;
+import com.donteco.alarmClock.adapters.AlarmClockAdapter;
 import com.donteco.alarmClock.alarm.AlarmClock;
 import com.donteco.alarmClock.alarm.DayPart;
-import com.donteco.alarmClock.adapters.AlarmClockAdapter;
 import com.donteco.alarmClock.background.AlarmClockManager;
 import com.donteco.alarmClock.dialogs.SocialNetworkChooseDialog;
 import com.donteco.alarmClock.help.ApplicationStorage;
 import com.donteco.alarmClock.help.ConstantsForApp;
 import com.donteco.alarmClock.help.FlagsForIntents;
 import com.donteco.alarmClock.help.KeysForIntents;
-import com.donteco.alarmClock.notification.NotificationBuilder;
 import com.donteco.alarmClock.socialNetwork.VkWallRequest;
 import com.facebook.AccessToken;
 import com.facebook.share.model.SharePhoto;
@@ -58,9 +55,6 @@ public class AlarmClockFragment extends Fragment {
     private Activity activity;
     private AlarmClockAdapter alarmClockAdapter;
 
-    //private NotificationManager manager;
-    private NotificationManagerCompat managerCompat;
-    private NotificationBuilder builder;
 
     //HEY YOU!
     private String timeForSharing;
@@ -71,11 +65,6 @@ public class AlarmClockFragment extends Fragment {
 
         try {
             activity = getActivity();
-            managerCompat = NotificationManagerCompat.from(getContext());
-            builder = new NotificationBuilder();
-            //We need only one
-            builder.createNotificationChanel();
-
             return inflater.inflate(R.layout.alarm_clock_fragment, container, false);
         }
         catch (Exception e) {
@@ -145,7 +134,7 @@ public class AlarmClockFragment extends Fragment {
                     AlarmClockManager.setExact(AlarmClockManager.deleteAlarmClock(),
                             alarmExecuteIntent);
 
-                    //Refresh scedule
+                    //Refresh schedule
                     alarmClock.setSchedule(alarmClock.getChosenDays());
                 }
             }
@@ -329,45 +318,4 @@ public class AlarmClockFragment extends Fragment {
         AlarmClockManager.setExact(AlarmClockManager.getNextAlarmExecuteTime(alarmClock, false),
                 alarmExecuteIntent);
     }
-
-    /*private void createNotification(AlarmClock alarmClock)
-    {
-        Intent activityIntent = new Intent(getContext(), MainActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 0, activityIntent, 0);
-
-        Intent broadcastIntent = new Intent(getContext(), NotificationReceiver.class);
-        broadcastIntent.putExtra("message", "in pending intent");
-        PendingIntent actionIntent = PendingIntent.getBroadcast(getContext(), 0,
-                broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Uri uri;
-        String alarmClockMusic = alarmClock.getAlarmClockMusicLocation();
-
-        if(alarmClockMusic == null)
-            uri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"+
-                    getApplicationContext().getPackageName() + "/" + R.raw.alarm_cock_standart_music);
-        else
-            uri = Uri.parse(alarmClockMusic);
-
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(activity.getApplicationContext(), ConstantsForApp.CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_access_alarm_black_24dp)
-                .setWhen(System.currentTimeMillis() + 6000)
-                .setContentTitle("Alarm clock")
-                .setContentText("Time " + alarmClock.getHours() + " " + alarmClock.getMinutes())
-                .setContentIntent(contentIntent)
-                .addAction(R.mipmap.ic_launcher, "Toast", actionIntent)
-                .setAutoCancel(true);
-
-        *//*if(alarmClock.hasVibration())
-        {
-            long[] vibrationPattern = new long[alarmClock.getDuration()*60000];
-            Arrays.fill(vibrationPattern, 1000);
-
-            builder.setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 });
-        }*//*
-
-        managerCompat.notify(alarmClockAdapter.getCurAlarmPosition(), builder.build());
-    }*/
-
 }

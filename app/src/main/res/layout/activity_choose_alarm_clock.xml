@@ -276,9 +276,12 @@
 
             <EditText
                 android:id="@+id/et_alarm_clock_name"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/choose_alarm_et_max_width"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:inputType="text"
+                android:scrollHorizontally="true"
+                android:ellipsize="end"
                 android:text="@string/alarm_description"
                 android:textAlignment="textEnd"
                 android:textSize="@dimen/choose_alarm_tv_text_size"
@@ -288,7 +291,7 @@
                 android:nextFocusUp="@+id/et_alarm_clock_name"
                 android:nextFocusLeft="@+id/et_alarm_clock_name"
                 android:selectAllOnFocus = "true"
-                />
+                android:singleLine="true" />
         </LinearLayout>
 
         <View

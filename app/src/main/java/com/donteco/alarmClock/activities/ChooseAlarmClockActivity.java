@@ -240,7 +240,7 @@ public class ChooseAlarmClockActivity extends AppCompatActivity
                     == PackageManager.PERMISSION_GRANTED)
             {
                 musicIntent = new Intent(Intent.ACTION_PICK, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(musicIntent, ConstantsForApp.MUSIC_PERMITION_REQUEST);
+                startActivityForResult(musicIntent, ConstantsForApp.MUSIC_PERMISSION_REQUEST);
             }
         });
     }
@@ -248,7 +248,7 @@ public class ChooseAlarmClockActivity extends AppCompatActivity
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
     {
-        if(requestCode == ConstantsForApp.MUSIC_PERMITION_REQUEST
+        if(requestCode == ConstantsForApp.MUSIC_PERMISSION_REQUEST
                 && grantResults.length > 0
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
         {
@@ -257,7 +257,7 @@ public class ChooseAlarmClockActivity extends AppCompatActivity
             {
                 Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
                 Intent musicIntent = new Intent(Intent.ACTION_PICK, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(musicIntent, ConstantsForApp.MUSIC_PERMITION_REQUEST);
+                startActivityForResult(musicIntent, ConstantsForApp.MUSIC_PERMISSION_REQUEST);
             }
             else
                 Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
@@ -267,7 +267,7 @@ public class ChooseAlarmClockActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
     {
-        if(requestCode == ConstantsForApp.MUSIC_PERMITION_REQUEST
+        if(requestCode == ConstantsForApp.MUSIC_PERMISSION_REQUEST
                 && resultCode == RESULT_OK
                 && data != null)
         {
@@ -300,9 +300,9 @@ public class ChooseAlarmClockActivity extends AppCompatActivity
 
     private void setMusicTitle(String songTitle)
     {
-        if(songTitle.length() > ConstantsForApp.MUSIC_NAME_LENGTH)
+        if(songTitle.length() > ConstantsForApp.TEXT_LENGTH_IN_TEXT_VIEW)
         {
-            songTitle = songTitle.substring(0 , ConstantsForApp.MUSIC_NAME_LENGTH);
+            songTitle = songTitle.substring(0 , ConstantsForApp.TEXT_LENGTH_IN_TEXT_VIEW);
             songTitle = songTitle + "...";
         }
 
@@ -326,7 +326,6 @@ public class ChooseAlarmClockActivity extends AppCompatActivity
 
         for (int i = 0; i < checkedDays.length; i++)
         {
-            //System.out.println("Checked days " + checkedDays[i]);
             if(checkedDays[i])
             {
                 days.append(ConstantsForApp.DAYS_LIST[i].getReductiveDayName());

@@ -18,4 +18,6 @@
     <dimen name="recycler_view_elem_padding">16dp</dimen>
     <dimen name="recycler_view_elem_margin_bottom_for_line">15dp</dimen>
     <dimen name="recycler_view_line_height">2dp</dimen>
+    <dimen name="alarm_widget_iv_max_width">50dp</dimen>
+    <dimen name="alarm_widget_iv_max_height">50dp</dimen>
 </resources>

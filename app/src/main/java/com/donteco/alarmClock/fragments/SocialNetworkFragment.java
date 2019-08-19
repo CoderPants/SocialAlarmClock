@@ -20,7 +20,6 @@ import com.donteco.alarmClock.help.ApplicationStorage;
 import com.donteco.alarmClock.help.ConstantsForApp;
 import com.donteco.alarmClock.socialNetwork.SocialNetworkUser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SocialNetworkFragment extends Fragment {
@@ -72,7 +71,8 @@ public class SocialNetworkFragment extends Fragment {
         }
 
 
-        socialNetworkAdapter = new SocialNetworkAdapter(new SocialNetworkAdapter.SocialNetworkCallBack() {
+        socialNetworkAdapter = new SocialNetworkAdapter(new SocialNetworkAdapter.SocialNetworkCallBack()
+        {
             @Override
             public void onPressed(SocialNetworkUser socialNetworkUser) {
                 switch (socialNetworkUser.getSocialNetworkName())
@@ -83,8 +83,29 @@ public class SocialNetworkFragment extends Fragment {
                     case "FaceBook":
                         activity.fbLogin();
                         break;
-
                 }
+            }
+
+            @Override
+            public void onExitPressed(int position)
+            {
+                SocialNetworkUser socialNetworkUser = ApplicationStorage.getSocialNetworkUsers().get(position);
+                socialNetworkUser.setAvatar(null);
+                socialNetworkUser.setName(null);
+                socialNetworkUser.setSurname(null);
+
+                switch (position)
+                {
+                    case 0:
+                        activity.vkLogOut();
+                        break;
+
+                    case 1:
+                        activity.fbLogOut();
+                        break;
+                }
+
+                updateUser(position, socialNetworkUser);
             }
 
             @Override

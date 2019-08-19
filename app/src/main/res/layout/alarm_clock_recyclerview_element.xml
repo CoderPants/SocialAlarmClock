@@ -13,8 +13,8 @@
 
         <ImageView
             android:id="@+id/iv_share_alarm_clock_recyclerview_fragment"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/alarm_widget_iv_max_width"
+            android:layout_height="@dimen/alarm_widget_iv_max_height"
             android:background="@color/white80"
             android:scaleType="fitXY"
             android:src = "@drawable/share_icon"

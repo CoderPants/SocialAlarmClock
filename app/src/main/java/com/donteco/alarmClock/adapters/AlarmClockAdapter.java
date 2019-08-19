@@ -49,13 +49,8 @@ public class AlarmClockAdapter extends RecyclerView.Adapter<AlarmClockAdapter.Al
     }
 
     public void setItem(AlarmClock alarmClock) {
-        //alarmClocks.set(curAlarmPosition, alarmClock);
         ApplicationStorage.setAlarmClock(curAlarmPosition, alarmClock);
         notifyItemChanged(curAlarmPosition);
-    }
-
-    public int getCurAlarmPosition() {
-        return curAlarmPosition;
     }
 
     @NonNull
@@ -106,7 +101,14 @@ public class AlarmClockAdapter extends RecyclerView.Adapter<AlarmClockAdapter.Al
             String time = String.format(Locale.ENGLISH, "%02d : %02d", alarmClock.getHours(), alarmClock.getMinutes());
 
             alarmTime.setText(time);
-            alarmName.setText(alarmClock.getDescription());
+
+            StringBuilder description = new StringBuilder(alarmClock.getDescription());
+            if(description.length() > ConstantsForApp.TEXT_LENGTH_IN_TEXT_VIEW)
+            {
+                description = description.delete(ConstantsForApp.TEXT_LENGTH_IN_TEXT_VIEW, description.length());
+                description.append("...");
+            }
+            alarmName.setText(description.toString());
 
             if(!alarmClock.isIs24HourFormat())
             {
@@ -190,9 +192,8 @@ public class AlarmClockAdapter extends RecyclerView.Adapter<AlarmClockAdapter.Al
         }
 
         private void shareBtnLogic() {
-            shareBtn.setOnClickListener(view -> {
-                alarmClockCallBack.onSharePress(alarmTime.getText().toString());
-            });
+            shareBtn.setOnClickListener(view ->
+                    alarmClockCallBack.onSharePress(alarmTime.getText().toString()));
         }
     }
 

@@ -37,12 +37,7 @@ public class DeleteAlarmsActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.rv_delete_alarm_clocks);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new AlarmClockDeleteAdapter(/*alarmClock ->
-        {
-            *//*NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            assert notificationManager != null;
-            notificationManager.deleteNotificationChannel(alarmClock.getChannelID());*//*
-        }*/);
+        adapter = new AlarmClockDeleteAdapter();
 
         recyclerView.setAdapter(adapter);
     }
@@ -81,8 +76,6 @@ public class DeleteAlarmsActivity extends AppCompatActivity {
                         alarmExecuteIntent);
             }
         }
-
-
     }
 
     private void cancelBtnLogic(Button cancelDeletingBtn)

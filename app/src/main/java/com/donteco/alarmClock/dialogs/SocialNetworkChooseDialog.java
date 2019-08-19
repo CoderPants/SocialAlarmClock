@@ -17,6 +17,7 @@ import com.donteco.alarmClock.help.ConstantsForApp;
 import com.donteco.alarmClock.help.KeysForIntents;
 import com.donteco.alarmClock.socialNetwork.SocialNetworkUser;
 import com.facebook.AccessToken;
+import com.vk.api.sdk.VK;
 import com.vk.api.sdk.auth.VKAccessToken;
 
 import java.util.ArrayList;
@@ -74,10 +75,9 @@ public class SocialNetworkChooseDialog extends DialogFragment
         List<String> socialNetworkNames = new ArrayList<>();
 
         VKAccessToken vkAccessToken = ApplicationStorage.getVkAccessToken();
-        //AccessToken fbAccessToken = ApplicationStorage.getFbAccessToken();
         AccessToken fbAccessToken = AccessToken.getCurrentAccessToken();
 
-        if(vkAccessToken != null && vkAccessToken.isValid())
+        if(VK.isLoggedIn() && vkAccessToken != null && vkAccessToken.isValid())
             socialNetworkNames.add( socialNetworkUsers.get(ConstantsForApp.VK_POSITION).getSocialNetworkName() );
 
         if(fbAccessToken != null && !fbAccessToken.isExpired())

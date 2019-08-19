@@ -20,10 +20,8 @@ import java.util.Locale;
 public class AlarmClockDeleteAdapter extends RecyclerView.Adapter<AlarmClockDeleteAdapter.AlarmClockDeleteViewHolder>
 {
     private List<AlarmClock> alarmClocks;
-    //private DeleteCallBack deleteCallBack;
 
     public AlarmClockDeleteAdapter() {
-        //this.deleteCallBack = deleteCallBack;
 
         alarmClocks = new ArrayList<>(ApplicationStorage.getAlarmClocks());
         notifyDataSetChanged();
@@ -79,16 +77,9 @@ public class AlarmClockDeleteAdapter extends RecyclerView.Adapter<AlarmClockDele
             alarmName.setText(alarmClock.getDescription());
             deleteAlarmBtn.setOnClickListener(view ->
             {
-                //deleteCallBack.deleteNotification(alarmClock);
                 alarmClocks.remove(alarmClock);
                 notifyItemRemoved(getAdapterPosition());
             });
         }
-
     }
-
-    /*public interface DeleteCallBack
-    {
-        void deleteNotification(AlarmClock alarmClock);
-    }*/
 }

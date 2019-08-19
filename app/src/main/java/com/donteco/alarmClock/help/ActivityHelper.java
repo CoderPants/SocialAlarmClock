@@ -28,7 +28,7 @@ public class ActivityHelper
         {
             ActivityCompat.requestPermissions(activity,
                     new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    ConstantsForApp.MUSIC_PERMITION_REQUEST);
+                    ConstantsForApp.MUSIC_PERMISSION_REQUEST);
         }
     }
 }

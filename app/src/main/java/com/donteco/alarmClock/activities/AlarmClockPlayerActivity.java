@@ -1,8 +1,10 @@
 package com.donteco.alarmClock.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
-import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -25,6 +27,7 @@ import com.donteco.alarmClock.help.KeysForIntents;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import in.shadowfax.proswipebutton.ProSwipeButton;
 
@@ -40,6 +43,8 @@ public class AlarmClockPlayerActivity extends AppCompatActivity {
 
         ActivityHelper activityHelper = new ActivityHelper(this);
         activityHelper.getRidOfTopBar();
+
+        sendOnNotificationChannel();
 
         Intent intent = getIntent();
         String songLocation = intent.getStringExtra(KeysForIntents.ALARM_CLOCK_MUSIC);
@@ -72,6 +77,25 @@ public class AlarmClockPlayerActivity extends AppCompatActivity {
         audioPlayer.startPlayer();
     }
 
+    private void sendOnNotificationChannel()
+    {
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
+
+        AlarmClock alarmClock = ApplicationStorage.getAlarmClocks().get(alarmClockPosition);
+        String time = String.format(Locale.ENGLISH, "%02d : %02d", alarmClock.getHours(), alarmClock.getMinutes());
+        String notificationTitle = "Alarm clock : " + time +" has fired!";
+
+        Notification notification = new NotificationCompat.Builder(getApplicationContext(),
+                ConstantsForApp.ALARM_CLOCK_NOTIFICATION_CHANNEL )
+                .setSmallIcon(R.drawable.ic_access_alarm_black_24dp)
+                .setContentTitle(notificationTitle)
+                .setCategory(NotificationCompat.CATEGORY_ALARM)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setAutoCancel(true)
+                .build();
+
+        notificationManager.notify(alarmClock.getId(), notification);
+    }
 
     //Continuing executing this alarm if it has more days
     @Override
@@ -89,8 +113,12 @@ public class AlarmClockPlayerActivity extends AppCompatActivity {
                 noRepeat = false;
         }
 
+
         if(noRepeat)
+        {
             curAlarmClock.setAlive(false);
+            ApplicationStorage.setAlarmClocksToStorage();
+        }
         else
         {
             Intent startAlarmClockIntent = AlarmClockManager.createIntent(getApplicationContext(),
@@ -103,9 +131,6 @@ public class AlarmClockPlayerActivity extends AppCompatActivity {
             AlarmClockManager.setExact(AlarmClockManager.getNextAlarmExecuteTime(curAlarmClock, true),
                     alarmExecuteIntent);
         }
-
-
-
         super.onDestroy();
     }
 
@@ -155,10 +180,10 @@ public class AlarmClockPlayerActivity extends AppCompatActivity {
             {
                 while (isPlaying && curMusicDuration != userChooseDurationMS)
                 {
-                    if(curMusicDuration <= ConstantsForApp.MUSIC_FADEIN_DUTATION_MS)
+                    if(curMusicDuration <= ConstantsForApp.MUSIC_FADE_IN_DURATION_MS)
                     {
                         mediaPlayer.setVolume(curVolume, curVolume);
-                        curVolume += ConstantsForApp.MUSIC_FADEIN_VOLUME_INCREASE;
+                        curVolume += ConstantsForApp.MUSIC_FADE_IN_VOLUME_INCREASE;
                     }
 
                     try {

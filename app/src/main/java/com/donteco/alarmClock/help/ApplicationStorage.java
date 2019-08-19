@@ -56,15 +56,6 @@ public class ApplicationStorage {
         setAlarmClocksToStorage();
     }
 
-    /*public static void removeAlarmClock(AlarmClock alarmClock) {
-        alarmClocks.remove(alarmClock);
-        setAlarmClocksToStorage();
-    }*/
-
-   /* public static AlarmClock getAlarmClock(int position) {
-        return alarmClocks.get(position);
-    }*/
-
     public static void setAlarmClock(int position, AlarmClock alarmClock) {
         alarmClocks.set(position, alarmClock);
         setAlarmClocksToStorage();

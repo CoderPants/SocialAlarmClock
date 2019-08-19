@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:padding="@dimen/recycler_view_elem_padding">
 
-    <!--Need round icon!!!!!!!!-->
+
     <de.hdodenhof.circleimageview.CircleImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/social_media_iv_for_social_picture"
@@ -45,9 +45,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/social_media_user_name_text_size"
-            android:text="Social media user name"
             android:textAlignment="textStart"
             android:textColor="@color/black95"/>
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/social_media_iv_exit"
+        android:layout_width="@dimen/alarm_widget_iv_max_width"
+        android:layout_height="@dimen/alarm_widget_iv_max_height"
+        android:background="@color/white80"
+        android:scaleType="fitXY"
+        android:src = "@drawable/social_network_exit_icon"
+        android:layout_gravity="center_horizontal|end"
+        />
 
 </FrameLayout>

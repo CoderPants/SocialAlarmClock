@@ -25,35 +25,22 @@ public class NotificationBuilder
     public NotificationBuilder() {
     }
 
-    public void createNotificationChanel()
+    public static void createNotificationChanel()
     {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
             NotificationChannel channel = new NotificationChannel(
-                    ConstantsForApp.CHANNEL_ID,
+                    ConstantsForApp.ALARM_CLOCK_NOTIFICATION_CHANNEL,
                     "Alarm clock notification",
                     NotificationManager.IMPORTANCE_HIGH
             );
 
             channel.setDescription("Alarm clock notification to walk up");
-
             channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
 
-            AudioAttributes audioAttributes = new AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .build();
-
-            channel.setSound(Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"+
-                    getApplicationContext().getPackageName() + "/" + R.raw.alarm_cock_standart_music), audioAttributes);
-
-
+            //Only by this i can get rid of vibration
             channel.enableVibration(true);
-
-            //Vibration for 1 sec for vibration length repeat amount
-            long[] vibration = new long[60];
-            Arrays.fill(vibration, 1000);
-
+            long[] vibration = new long[0];
             channel.setVibrationPattern(vibration);
 
             NotificationManager manager = NotificationManagingHelper.getNotificationManager();

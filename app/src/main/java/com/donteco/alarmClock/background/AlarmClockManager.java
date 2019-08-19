@@ -41,8 +41,6 @@ public class AlarmClockManager
         startAlarmClockIntent.putExtra(KeysForIntents.ALARM_CLOCK_VIBRATION, alarmClock.hasVibration());
         startAlarmClockIntent.putExtra(KeysForIntents.ALARM_CLOCK_INDEX, alarmClockPosition);
 
-        System.out.println("Calendar info position " + alarmClockPosition);
-
         return startAlarmClockIntent;
     }
 
@@ -93,7 +91,10 @@ public class AlarmClockManager
                 curMonthDay, curMonth, curYear, hours, minutes, chosenDays, schedule,
                 alarmClock, hasFired);
 
-        System.out.println("Calendar info for next days: weekdDay " + calendarInfo[0] + " monthDay " + calendarInfo[1] + " month " + calendarInfo[2] + " year " + calendarInfo[3] + " hours " + hours + " minutes " + minutes + " hasFired " + hasFired);
+        Log.i(ConstantsForApp.LOG_TAG,
+                "Calendar info for next days: weekDay " + calendarInfo[0] + " monthDay " +
+                        calendarInfo[1] + " month " + calendarInfo[2] + " year " + calendarInfo[3] +
+                        " hours " + hours + " minutes " + minutes + " hasFired " + hasFired);
 
         calendar.set(Calendar.HOUR_OF_DAY, hours);
         calendar.set(Calendar.MINUTE, minutes);
@@ -215,10 +216,7 @@ public class AlarmClockManager
         }
 
         if(runOutOfDays)
-        {
-            System.out.println("Calendar info runofdays " + runOutOfDays);
             alarmClock.setSchedule(chosenDays);
-        }
 
         return result;
     }
