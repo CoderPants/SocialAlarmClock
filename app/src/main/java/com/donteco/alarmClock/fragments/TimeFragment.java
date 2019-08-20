@@ -1,12 +1,21 @@
 package com.donteco.alarmClock.fragments;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,7 +24,10 @@ import androidx.fragment.app.Fragment;
 import com.donteco.alarmClock.R;
 import com.donteco.alarmClock.help.ConstantsForApp;
 
+import java.io.IOException;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -24,6 +36,7 @@ public class TimeFragment extends Fragment {
     private Activity activity;
     private Timer timer;
     private TextView currentTimeTV;
+    private TextView currentCity;
 
     @Nullable
     @Override
@@ -45,6 +58,84 @@ public class TimeFragment extends Fragment {
 
         currentTimeTV = view.findViewById(R.id.show_time_tv_current_time);
         showCurrentTime();
+
+        currentCity = view.findViewById(R.id.tv_current_location);
+        setCurrentLocation();
+
+        currentCity.setOnClickListener(view1 -> setCurrentLocation());
+    }
+
+    private void setCurrentLocation()
+    {
+        if(activity.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED)
+        {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    ConstantsForApp.LOCATION_PERMITION_REQUEST);
+        }
+        else
+        {
+            LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+            String city = getCurrentLocation(location.getLatitude(), location.getLongitude());
+
+            currentCity.setText(city);
+        }
+    }
+
+    private String getCurrentLocation(double lat, double lon)
+    {
+        String cityName = "";
+
+        Geocoder geocoder = new Geocoder(activity.getApplicationContext(), Locale.ENGLISH);
+        List<Address> addresses;
+
+        try
+        {
+            addresses = geocoder.getFromLocation(lat, lon, 10);
+
+            if(addresses.size() > 0)
+            {
+                for (Address address : addresses)
+                {
+                    if(address.getLocality() != null && address.getLocality().length() > 0)
+                    {
+                        cityName = address.getLocality();
+                        break;
+                    }
+                }
+            }
+        }
+        catch (IOException e)
+        {
+            Log.e(ConstantsForApp.LOG_TAG, "Error caused by getting current location in Time Fragment" +
+                    "in getCurrentLocation method", e);
+        }
+
+        return cityName;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    {
+        if (requestCode == ConstantsForApp.LOCATION_PERMITION_REQUEST)
+        {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+                LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+                //Just getting rid of this error
+                @SuppressLint("MissingPermission")
+                Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+                String city = getCurrentLocation(location.getLatitude(), location.getLongitude());
+                currentCity.setText(city);
+            }
+            else
+                Toast.makeText(activity, "Permission denied!", Toast.LENGTH_SHORT).show();
+        }
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     //For timer deleting

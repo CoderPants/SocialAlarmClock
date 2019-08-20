@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">AlarmClock</string>
     <string name="text_style">monospace</string>
-    <string name="current_city_string">Rostov</string>
+    <string name="current_city_string">Press here to get location</string>
     <string name="add_alarm">Add</string>
 
     <string name="am_pm">AM/PM</string>

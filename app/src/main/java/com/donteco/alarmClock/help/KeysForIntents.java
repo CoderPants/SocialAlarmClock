@@ -19,5 +19,4 @@ public class KeysForIntents {
     public static final String DURATION = "Duration";
 
     public static final String CHOSEN_SOCIAL_NETWOKS = "Checked_networks";
-
 }

@@ -233,7 +233,7 @@ public class ChooseAlarmClockActivity extends AppCompatActivity
     private void chooseSongLogic()
     {
         musicButton.setOnClickListener(view -> {
-            activityHelper.getMusicPermition();
+            activityHelper.getMusicPermission();
             Intent musicIntent;
 
             if(ContextCompat.checkSelfPermission(ChooseAlarmClockActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)

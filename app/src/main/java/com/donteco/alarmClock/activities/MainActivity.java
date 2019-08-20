@@ -75,14 +75,12 @@ public class MainActivity extends SocialNetworkAuthorisationActivity {
 
     @Override
     protected void onPause() {
-        System.out.println("In quiting method");
         ApplicationStorage.setAlarmClocksToStorage();
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        System.out.println("In quiting method");
         ApplicationStorage.setAlarmClocksToStorage();
         super.onDestroy();
     }

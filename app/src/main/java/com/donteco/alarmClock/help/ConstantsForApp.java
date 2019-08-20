@@ -5,6 +5,7 @@ import com.donteco.alarmClock.alarm.DayOfWeek;
 public class ConstantsForApp {
 
     public static final int MUSIC_PERMISSION_REQUEST = 1;
+    public static final int LOCATION_PERMITION_REQUEST = 2;
     public static final int ONE_SECOND_PAUSE = 1000;
     public static final String LOG_TAG = "MY_LOG_TAG_FOR_APP";
     public static final int PAGE_COUNT = 3;
