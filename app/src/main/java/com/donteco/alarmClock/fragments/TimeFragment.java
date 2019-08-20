@@ -38,6 +38,9 @@ public class TimeFragment extends Fragment {
     private TextView currentTimeTV;
     private TextView currentCity;
 
+    //Permission creation
+    private boolean noView = true;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -60,7 +63,13 @@ public class TimeFragment extends Fragment {
         showCurrentTime();
 
         currentCity = view.findViewById(R.id.tv_current_location);
-        setCurrentLocation();
+
+        //I need to show permission request only once
+        if(noView)
+        {
+            setCurrentLocation();
+            noView = false;
+        }
 
         currentCity.setOnClickListener(view1 -> setCurrentLocation());
     }

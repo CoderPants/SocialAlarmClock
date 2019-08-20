@@ -117,7 +117,7 @@ public class AlarmClockPlayerActivity extends AppCompatActivity {
         if(noRepeat)
         {
             curAlarmClock.setAlive(false);
-            ApplicationStorage.setAlarmClocksToStorage();
+            ApplicationStorage.pushAlarmClocksToStorage();
         }
         else
         {

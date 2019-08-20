@@ -361,7 +361,11 @@ public class ChooseAlarmClockActivity extends AppCompatActivity
             if (s.length() > 0)
                 stringBuilder.append(s);
 
-        String output = stringBuilder.toString();
-        alarmDuration.setText(output);
+        if(stringBuilder.length() == 0)
+            stringBuilder.append("1 min");
+
+        System.out.println("String builder " + stringBuilder.length());
+
+        alarmDuration.setText(stringBuilder.toString());
     }
 }

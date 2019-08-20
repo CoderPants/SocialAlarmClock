@@ -105,7 +105,6 @@ public class AlarmClockManager
         calendar.set(Calendar.MONTH, calendarInfo[2]);
         calendar.set(Calendar.YEAR, calendarInfo[3]);
 
-
         return calendar.getTimeInMillis();
     }
 
@@ -118,9 +117,9 @@ public class AlarmClockManager
     {
         int[] result = new int[4];
 
-        //Need normal number
-        YearMonth yearMonthObject = YearMonth.of(curYear, curMonth);
-        int daysInMonth = yearMonthObject.lengthOfMonth();
+        Calendar cal1 = Calendar.getInstance();
+        cal1.set(curYear,curMonth,curMonthDay);
+        int daysInMonth = cal1.getActualMaximum(Calendar.DAY_OF_MONTH);
 
         boolean hasChosenDays = false;
 

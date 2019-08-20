@@ -22,8 +22,8 @@ public class AlarmClockApplication extends Application {
 
         //Setting alarmClock storage
         ApplicationStorage.getInstance(getApplicationContext());
-        try {
-            ApplicationStorage.getAlarmClocksFromStorage();
+        /*try {
+            ApplicationStorage.pullAlarmClocksFromStorage();
         } catch (JSONException e) {
             Log.i(ConstantsForApp.LOG_TAG,
                     "In application onCreate. Json exception by creating empty alarm clocks", e);
@@ -31,7 +31,7 @@ public class AlarmClockApplication extends Application {
 
         //Setting social network storage
         try {
-            ApplicationStorage.getSocialNetworkUsersFormStorage();
+            ApplicationStorage.pullSocialNetworkUsersFormStorage();
         }
         catch (JSONException e) {
             Log.i(ConstantsForApp.LOG_TAG,
@@ -39,7 +39,10 @@ public class AlarmClockApplication extends Application {
         }
 
         //Vk have stock serialization method
-        ApplicationStorage.getVkAccessTokenFromStorage();
+        ApplicationStorage.pullVkAccessTokenFromStorage();*/
+
+        //Getting all info from storage
+        ApplicationStorage.pullFromStorage();
 
         VK.initialize(getApplicationContext());
 

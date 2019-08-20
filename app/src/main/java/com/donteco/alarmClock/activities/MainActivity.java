@@ -17,7 +17,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.donteco.alarmClock.R;
 import com.donteco.alarmClock.fragments.AlarmClockFragment;
-import com.donteco.alarmClock.fragments.SocialNetworkFragment;
 import com.donteco.alarmClock.fragments.TimeFragment;
 import com.donteco.alarmClock.help.ActivityHelper;
 import com.donteco.alarmClock.help.ApplicationStorage;
@@ -75,13 +74,13 @@ public class MainActivity extends SocialNetworkAuthorisationActivity {
 
     @Override
     protected void onPause() {
-        ApplicationStorage.setAlarmClocksToStorage();
+        ApplicationStorage.pushAlarmClocksToStorage();
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        ApplicationStorage.setAlarmClocksToStorage();
+        ApplicationStorage.pushAlarmClocksToStorage();
         super.onDestroy();
     }
 

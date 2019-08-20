@@ -25,7 +25,7 @@
     <string name="alarm_description">Alarm clock ></string>
 
     <string name="alarm_duration">Duration</string>
-    <string name="alarm_duration_standart">10 min ></string>
+    <string name="alarm_duration_standart">1 min ></string>
 
     <string name="delete_alarm">Delete</string>
     <string name="log_in_string">Log in</string>

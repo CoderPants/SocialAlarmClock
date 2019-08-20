@@ -63,7 +63,7 @@ public class DurationChooseDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
 
         builder.setTitle("Choose duration of the alarm")
-                .setSingleChoiceItems(duration, -1, singleChoiceListener)
+                .setSingleChoiceItems(duration, 0, singleChoiceListener)
                 .setPositiveButton("Ok", acceptBtnListener)
                 .setNegativeButton("Cancel", cancelBtnListener);
 
