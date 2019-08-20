@@ -46,7 +46,23 @@ public class ApplicationStorage {
         pushVkAccessTokenToStorage();
     }*/
 
-    //In another thread
+    public static AlarmClock getAlarmClockById(int id)
+    {
+        AlarmClock curAlarmClock = null;
+
+        for (AlarmClock alarmClock : alarmClocks)
+        {
+            if(alarmClock.getId() == id)
+            {
+                curAlarmClock = alarmClock;
+                break;
+            }
+        }
+
+        return curAlarmClock;
+    }
+
+
     public static void setAlarmClocks(List<AlarmClock> newAlarmClocks) {
         alarmClocks = newAlarmClocks;
         pushAlarmClocksToStorage();

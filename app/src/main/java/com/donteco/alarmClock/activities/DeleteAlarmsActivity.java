@@ -67,7 +67,7 @@ public class DeleteAlarmsActivity extends AppCompatActivity {
             if( !deletedAlarmClocks.contains(alarmClock) )
             {
                 Intent startAlarmClockIntent = AlarmClockManager.createIntent(getApplicationContext(),
-                        alarmClock, i);
+                        alarmClock);
 
                 PendingIntent alarmExecuteIntent = PendingIntent.getActivity(getApplicationContext(),
                         alarmClock.getId(), startAlarmClockIntent, PendingIntent.FLAG_CANCEL_CURRENT);

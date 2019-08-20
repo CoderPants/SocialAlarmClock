@@ -178,7 +178,7 @@ public class AlarmClockAdapter extends RecyclerView.Adapter<AlarmClockAdapter.Al
             alarmLayout.setOnClickListener(view ->
             {
                 curAlarmPosition = getAdapterPosition();
-                alarmClockCallBack.onPress(curAlarmPosition);
+                alarmClockCallBack.onPress(alarmClocks.get(curAlarmPosition).getId());
             });
         }
 
@@ -187,7 +187,7 @@ public class AlarmClockAdapter extends RecyclerView.Adapter<AlarmClockAdapter.Al
             alarmSwitch.setOnClickListener(view -> {
                 AlarmClock alarmClock = alarmClocks.get(getAdapterPosition());
                 alarmClock.setAlive(!alarmClock.isAlive());
-                alarmClockCallBack.switchLogic(getAdapterPosition(), alarmSwitch);
+                alarmClockCallBack.switchLogic(alarmClock, alarmSwitch);
             });
         }
 
@@ -200,8 +200,8 @@ public class AlarmClockAdapter extends RecyclerView.Adapter<AlarmClockAdapter.Al
     //Interface for activity connection
     public interface AlarmClockCallBack {
         void onLongPress();
-        void onPress(int position);
+        void onPress(int id);
         void onSharePress(String time);
-        void switchLogic(int position, Switch isAlive);
+        void switchLogic(AlarmClock alarmClock, Switch isAlive);
     }
 }

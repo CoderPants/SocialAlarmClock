@@ -34,7 +34,7 @@ import in.shadowfax.proswipebutton.ProSwipeButton;
 public class AlarmClockPlayerActivity extends AppCompatActivity {
 
     Vibrator vibrator;
-    int alarmClockPosition;
+    int alarmClockID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,15 +44,17 @@ public class AlarmClockPlayerActivity extends AppCompatActivity {
         ActivityHelper activityHelper = new ActivityHelper(this);
         activityHelper.getRidOfTopBar();
 
-        sendOnNotificationChannel();
-
         Intent intent = getIntent();
         String songLocation = intent.getStringExtra(KeysForIntents.ALARM_CLOCK_MUSIC);
 
+        System.out.println("Passed intent");
         //Converting ms to min
         int duration = intent.getIntExtra(KeysForIntents.ALARM_CLOCK_DURATION, 1) * 60000;
         boolean hasVibration = intent.getBooleanExtra(KeysForIntents.ALARM_CLOCK_VIBRATION, true);
-        alarmClockPosition = intent.getIntExtra(KeysForIntents.ALARM_CLOCK_INDEX, -1);
+        alarmClockID = intent.getIntExtra(KeysForIntents.ALARM_CLOCK_ID, -1);
+        System.out.println("Passed intent");
+
+        sendOnNotificationChannel();
 
         ProSwipeButton swipeBtn = findViewById(R.id.alarm_clock_player_swipe_btn);
 
@@ -82,7 +84,7 @@ public class AlarmClockPlayerActivity extends AppCompatActivity {
     {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
 
-        AlarmClock alarmClock = ApplicationStorage.getAlarmClocks().get(alarmClockPosition);
+        AlarmClock alarmClock = ApplicationStorage.getAlarmClockById(alarmClockID);
 
         String time = String.format(Locale.ENGLISH, "%02d : %02d", alarmClock.getHours(), alarmClock.getMinutes());
         String notificationTitle = "Alarm clock : " + time +" has fired!";
@@ -103,8 +105,7 @@ public class AlarmClockPlayerActivity extends AppCompatActivity {
     @Override
     protected void onDestroy()
     {
-        List<AlarmClock> alarmClocks = ApplicationStorage.getAlarmClocks();
-        AlarmClock curAlarmClock = alarmClocks.get(alarmClockPosition);
+        AlarmClock curAlarmClock = ApplicationStorage.getAlarmClockById(alarmClockID);
 
         boolean noRepeat = true;
         boolean[] chosenDays = curAlarmClock.getChosenDays();
@@ -122,7 +123,7 @@ public class AlarmClockPlayerActivity extends AppCompatActivity {
         else
         {
             Intent startAlarmClockIntent = AlarmClockManager.createIntent(getApplicationContext(),
-                    curAlarmClock, alarmClockPosition);
+                    curAlarmClock);
 
 
             PendingIntent alarmExecuteIntent = PendingIntent.getActivity(getApplicationContext(),
@@ -131,6 +132,9 @@ public class AlarmClockPlayerActivity extends AppCompatActivity {
             AlarmClockManager.setExact(AlarmClockManager.getNextAlarmExecuteTime(curAlarmClock, true),
                     alarmExecuteIntent);
         }
+
+        startActivity(new Intent(AlarmClockPlayerActivity.this, MainActivity.class));
+
         super.onDestroy();
     }
 

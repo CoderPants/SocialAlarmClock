@@ -12,12 +12,20 @@ import com.donteco.alarmClock.alarm.DayPart;
 import com.donteco.alarmClock.help.ConstantsForApp;
 import com.donteco.alarmClock.help.KeysForIntents;
 
-import java.time.YearMonth;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class AlarmClockManager
 {
     private static AlarmManager alarmManager;
+
+    private static final long secondInMs = 1000;
+    private static final long minuteInMS = 60 * secondInMs;
+    private static final long hourInMS  = 60 * minuteInMS;
+    private static final long dayInMS = 24 * hourInMS;
 
     private AlarmClockManager(){
     }
@@ -33,13 +41,13 @@ public class AlarmClockManager
         Log.i(ConstantsForApp.LOG_TAG, "Passed alarm manager setting");
     }
 
-    public static Intent createIntent(Context context, AlarmClock alarmClock, int alarmClockPosition)
+    public static Intent createIntent(Context context, AlarmClock alarmClock)
     {
         Intent startAlarmClockIntent = new Intent(context, AlarmClockPlayerActivity.class);
         startAlarmClockIntent.putExtra(KeysForIntents.ALARM_CLOCK_MUSIC, alarmClock.getAlarmClockMusicLocation());
         startAlarmClockIntent.putExtra(KeysForIntents.ALARM_CLOCK_DURATION, alarmClock.getDuration());
         startAlarmClockIntent.putExtra(KeysForIntents.ALARM_CLOCK_VIBRATION, alarmClock.hasVibration());
-        startAlarmClockIntent.putExtra(KeysForIntents.ALARM_CLOCK_INDEX, alarmClockPosition);
+        startAlarmClockIntent.putExtra(KeysForIntents.ALARM_CLOCK_ID, alarmClock.getId());
 
         return startAlarmClockIntent;
     }
@@ -62,161 +70,153 @@ public class AlarmClockManager
         return calendar.getTimeInMillis();
     }
 
-    public static long getNextAlarmExecuteTime(AlarmClock alarmClock, boolean hasFired)
-    {
-        Calendar calendar = Calendar.getInstance();
-
-        int hours = alarmClock.getHours();
-        int minutes = alarmClock.getMinutes();
-        boolean[] chosenDays = alarmClock.getChosenDays();
-        boolean[] schedule = alarmClock.getSchedule();
-        boolean is24Hour = alarmClock.isIs24HourFormat();
-        DayPart dayPart = alarmClock.getDayPart();
-
-        int curHours = calendar.get(Calendar.HOUR_OF_DAY);
-        int curMinutes = calendar.get(Calendar.MINUTE);
-
-        if(!is24Hour && dayPart == DayPart.PM)
-            hours += 12;
-
-        int curWeekDay = calendar.get(Calendar.DAY_OF_WEEK);
-        //accurate
-        int curMonthDay = calendar.get(Calendar.DAY_OF_MONTH);
-        //-1 need to increment
-        int curMonth = calendar.get(Calendar.MONTH);
-        //accurate
-        int curYear = calendar.get(Calendar.YEAR);
-
-        int[] calendarInfo = getNextTime(curHours, curMinutes, curWeekDay,
-                curMonthDay, curMonth, curYear, hours, minutes, chosenDays, schedule,
-                alarmClock, hasFired);
-
-        Log.i(ConstantsForApp.LOG_TAG,
-                "Calendar info for next days: weekDay " + calendarInfo[0] + " monthDay " +
-                        calendarInfo[1] + " month " + calendarInfo[2] + " year " + calendarInfo[3] +
-                        " hours " + hours + " minutes " + minutes + " hasFired " + hasFired);
-
-        calendar.set(Calendar.HOUR_OF_DAY, hours);
-        calendar.set(Calendar.MINUTE, minutes);
-        calendar.set(Calendar.SECOND, 1);
-        calendar.set(Calendar.MILLISECOND, 1);
-        calendar.set(Calendar.DAY_OF_WEEK, calendarInfo[0]);
-        calendar.set(Calendar.DAY_OF_MONTH, calendarInfo[1]);
-        calendar.set(Calendar.MONTH, calendarInfo[2]);
-        calendar.set(Calendar.YEAR, calendarInfo[3]);
-
-        return calendar.getTimeInMillis();
+    public static long getNextAlarmExecuteTime(AlarmClock alarmClock, boolean hasFired) {
+        return nextDayInMs(alarmClock);
     }
 
-    //Week day, month day, month, year
-    //Only God knows what's going on here
-    //Beware, from this line goes pure evil
-    private static int[] getNextTime(int curHours, int curMinutes, int curWeekDay,  int curMonthDay, int curMonth, int curYear,
-                                    int userHours, int userMinutes, boolean[] chosenDays, boolean[] schedule,
-                                     AlarmClock alarmClock, boolean hasFired)
+    private static long nextDayInMs(AlarmClock alarmClock)
     {
-        int[] result = new int[4];
+        Calendar calendar = Calendar.getInstance(Locale.getDefault());
 
-        Calendar cal1 = Calendar.getInstance();
-        cal1.set(curYear,curMonth,curMonthDay);
-        int daysInMonth = cal1.getActualMaximum(Calendar.DAY_OF_MONTH);
+        int userHours = alarmClock.getHours();
+        int userMinutes = alarmClock.getMinutes();
+        boolean[] chosenDays = alarmClock.getChosenDays();
+        boolean[] schedule = alarmClock.getSchedule();
 
-        boolean hasChosenDays = false;
+        //For 12 hour format
+        if(!alarmClock.isIs24HourFormat() && alarmClock.getDayPart() == DayPart.PM)
+            userHours += 12;
 
-        //Check if user choose smth
-        for (boolean chosenDay : chosenDays)
-            if (chosenDay) {
-                hasChosenDays = true;
-                break;
-            }
+        long curTime = calendar.getTimeInMillis();
+        long addedTime = 0L;
+        int curHours = calendar.get(Calendar.HOUR_OF_DAY);
+        int curMinutes = calendar.get(Calendar.MINUTE);
+        int curSeconds = calendar.get(Calendar.SECOND);
+        int curWeekDay = calendar.get(Calendar.DAY_OF_WEEK);
 
-        if (!hasChosenDays)
-        {
-            if(curHours >= userHours && curMinutes >= userMinutes)
-                curMonthDay++;
-
-            result[0] = curWeekDay;
-            result[1] = curMonthDay;
-            result[2] = curMonth;
-            result[3] = curYear;
-
-            return result;
-        }
-
-        //------------------------------------------------------------------------------------------
-        //No else, cos i hate brackets
-        //Cos calendar has another week numeration
         if(curWeekDay == 1)
             curWeekDay = 6;
         else
             curWeekDay -= 2;
 
-        int nextWeekDay = curWeekDay;
+        addedTime = addDaysInMS(curHours, curMinutes, userHours, userMinutes);
 
-        int i = nextWeekDay;
-
-       if(curHours >= userHours && curMinutes >= userMinutes)
-       {
-           i++;
-           if(i == schedule.length)
-               i = 0;
-       }
-
-        while (!schedule[i])
+        if(hasChosenDays(chosenDays))
         {
-            ++i;
-            if(i == schedule.length)
-                i = 0;
-        }
+            int i = curWeekDay;
+            int amountOfDays = 0;
 
-        nextWeekDay = i;
-        //This day finished
-        schedule[i] = false;
-
-        //If we reach the same day
-        if(nextWeekDay == curWeekDay &&
-                (hasFired || (curHours >= userHours && curMinutes >= userMinutes) ))
-            curMonthDay += schedule.length;
-
-        if(nextWeekDay > curWeekDay)
-            curMonthDay += nextWeekDay - curWeekDay;
-
-         if(nextWeekDay < curWeekDay)
-             curMonthDay += schedule.length - curWeekDay + nextWeekDay;
-
-        if(nextWeekDay == 6)
-            nextWeekDay = 1;
-        else
-            nextWeekDay += 2;
-
-        if(curMonthDay > daysInMonth)
-        {
-            curMonthDay -= daysInMonth;
-            curMonth++;
-
-            if(curMonth > 11)
+            if(curHours >= userHours && curMinutes >= userMinutes)
             {
-                curMonth = 0;
-                curYear++;
+                i++;
+                amountOfDays++;
+                if(i == schedule.length)
+                    i = 0;
             }
+
+            while (!schedule[i])
+            {
+                amountOfDays++;
+                i++;
+                if(i == schedule.length)
+                    i = 0;
+            }
+
+            schedule[i] = false;
+
+            if(curHours >= userHours && curMinutes >= userMinutes)
+            {
+                //Cos we already have one day already
+                if(amountOfDays == 0)
+                    addedTime += 6 * dayInMS;
+                else
+                    addedTime += (amountOfDays - 1) * dayInMS;
+
+            }
+            else
+                addedTime += amountOfDays * dayInMS;
+
+
+            //Reset schedule
+            boolean runOutOfDays = true;
+
+            for (boolean isNextDay : schedule)
+            {
+                if(isNextDay)
+                    runOutOfDays = false;
+            }
+
+            if(runOutOfDays)
+                alarmClock.setSchedule(chosenDays);
         }
 
-        result[0] = nextWeekDay;
-        result[1] = curMonthDay;
-        result[2] = curMonth;
-        result[3] = curYear;
+        addedTime -= curSeconds * secondInMs;
+        addedTime -= calendar.get(Calendar.MILLISECOND);
+        curTime += addedTime;
 
-        //Reset schedule
-        boolean runOutOfDays = true;
+        return curTime;
+    }
 
-        for (boolean isNextDay : schedule) {
-            if(isNextDay)
-                runOutOfDays = false;
+    private static boolean hasChosenDays(boolean[] chosenDays)
+    {
+        for (boolean chosenDay : chosenDays)
+            if (chosenDay)
+                return true;
+
+        return false;
+    }
+
+    private static long addDaysInMS(int curHours, int curMinutes, int userHours, int userMinutes)
+    {
+        long result = 0L;
+
+        if(curHours >= userHours && curMinutes >= userMinutes)
+        {
+            if (curMinutes != 0)
+            {
+                result += (60 - curMinutes + userMinutes) * minuteInMS;
+                curHours++;
+            }
+
+            result += (24 - curHours + userHours ) * hourInMS;
         }
+        else
+        {
+            if (curMinutes != 0)
+            {
+                result += (60 - curMinutes + userMinutes) * minuteInMS;
+                curHours++;
+            }
 
-        if(runOutOfDays)
-            alarmClock.setSchedule(chosenDays);
+            result += (userHours - curHours) * hourInMS;
+        }
 
         return result;
     }
+
+    /*private static long logicForNoRepeat(int curHours, int curMinutes, int userHours, int userMinutes)
+    {
+        long addedTime = 0L;
+        if(curHours >= userHours && curMinutes >= userMinutes)
+        {
+            if (curMinutes != 0)
+            {
+                addedTime += (60 - curMinutes + userMinutes) * minuteInMS;
+                curHours++;
+            }
+
+            addedTime += (24 - curHours + userHours ) * hourInMS;
+        }
+        else
+        {
+            if (curMinutes != 0)
+            {
+                addedTime += (60 - curMinutes + userMinutes) * minuteInMS;
+                curHours++;
+            }
+
+            addedTime += (userHours - curHours) * hourInMS;
+        }
+        return addedTime;
+    }*/
 }

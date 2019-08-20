@@ -96,11 +96,10 @@ public class AlarmClockFragment extends Fragment {
             }
 
             @Override
-            public void onPress(int position)
+            public void onPress(int id)
             {
                 Intent addAlarmIntent = new Intent(activity, ChooseAlarmClockActivity.class);
-                System.out.println("Cur alarm position in press " + position);
-                addAlarmIntent.putExtra(KeysForIntents.ALARM_CLOCK_POSITION, position);
+                addAlarmIntent.putExtra(KeysForIntents.ALARM_CLOCK_ID, id);
                 startActivityForResult(addAlarmIntent, FlagsForIntents.ALARM_CHANGE_INFO_REQUEST);
             }
 
@@ -118,16 +117,14 @@ public class AlarmClockFragment extends Fragment {
             }
 
             @Override
-            public void switchLogic(int position, Switch alarmClockSwitch)
+            public void switchLogic(AlarmClock alarmClock, Switch alarmClockSwitch)
             {
-                AlarmClock alarmClock = ApplicationStorage.getAlarmClocks().get(position);
-
                 if(alarmClockSwitch.isChecked())
                     startAlarmClock(alarmClock);
                 else
                 {
                     Intent startAlarmClockIntent = AlarmClockManager.createIntent(activity.getApplicationContext(),
-                            alarmClock, position);
+                            alarmClock);
 
                     PendingIntent alarmExecuteIntent = PendingIntent.getActivity(activity.getApplicationContext(),
                             alarmClock.getId(), startAlarmClockIntent, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -279,15 +276,15 @@ public class AlarmClockFragment extends Fragment {
         String description = data.getStringExtra(KeysForIntents.DESCRIPTION);
         int duration = data.getIntExtra(KeysForIntents.DURATION, defaultDuration);
 
-        int index = data.getIntExtra(KeysForIntents.ALARM_CLOCK_INDEX, Integer.MAX_VALUE);
+        int id = data.getIntExtra(KeysForIntents.ALARM_CLOCK_ID, Integer.MAX_VALUE);
 
         //Delete existing
-        if(index != Integer.MAX_VALUE)
+        if(id != Integer.MAX_VALUE)
         {
-            AlarmClock alarmClock = ApplicationStorage.getAlarmClocks().get(index);
+            AlarmClock alarmClock = ApplicationStorage.getAlarmClockById(id);
 
             Intent startAlarmClockIntent = AlarmClockManager.createIntent(activity.getApplicationContext(),
-                    alarmClock, index);
+                    alarmClock);
 
             PendingIntent alarmExecuteIntent = PendingIntent.getActivity(activity.getApplicationContext(),
                     alarmClock.getId(), startAlarmClockIntent, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -302,10 +299,8 @@ public class AlarmClockFragment extends Fragment {
 
     private void startAlarmClock(AlarmClock alarmClock)
     {
-        int alarmIndex = ApplicationStorage.getAlarmClocks().indexOf(alarmClock);
-
         Intent startAlarmClockIntent = AlarmClockManager.createIntent(activity.getApplicationContext(),
-                alarmClock, alarmIndex);
+                alarmClock);
 
         //Cancel or update?
         PendingIntent alarmExecuteIntent = PendingIntent.getActivity(activity.getApplicationContext(), alarmClock.getId(),

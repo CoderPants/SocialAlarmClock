@@ -35,6 +35,7 @@ import com.donteco.alarmClock.help.ConstantsForApp;
 import com.donteco.alarmClock.help.KeysForIntents;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class ChooseAlarmClockActivity extends AppCompatActivity
@@ -61,7 +62,7 @@ public class ChooseAlarmClockActivity extends AppCompatActivity
     private Uri songData;
 
     //For setting alarm clock
-    private int alarmClockIndex;
+    private int alarmClockId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,9 +108,9 @@ public class ChooseAlarmClockActivity extends AppCompatActivity
         setNumberPickers(maxHours, minHours);
 
         Intent alarmClockInfo = getIntent();
-        alarmClockIndex = alarmClockInfo.getIntExtra(KeysForIntents.ALARM_CLOCK_POSITION, Integer.MAX_VALUE);
+        alarmClockId = alarmClockInfo.getIntExtra(KeysForIntents.ALARM_CLOCK_ID, Integer.MAX_VALUE);
 
-        if(alarmClockIndex == Integer.MAX_VALUE)
+        if(alarmClockId == Integer.MAX_VALUE)
             logicForAddingAlarmClock();
         else
             logicForChangingAlarmClock();
@@ -121,7 +122,8 @@ public class ChooseAlarmClockActivity extends AppCompatActivity
 
     private void logicForChangingAlarmClock()
     {
-        AlarmClock curAlarmClock = ApplicationStorage.getAlarmClocks().get(alarmClockIndex);
+        AlarmClock curAlarmClock = ApplicationStorage.getAlarmClockById(alarmClockId);
+
         pickerForHours.setValue(curAlarmClock.getHours());
         pickerForMinutes.setValue(curAlarmClock.getMinutes());
 
@@ -144,7 +146,7 @@ public class ChooseAlarmClockActivity extends AppCompatActivity
 
         vibrationSwitch.setChecked(curAlarmClock.hasVibration());
         alarmDescription.setText(curAlarmClock.getDescription());
-        alarmDuration.setText(String.format(Locale.ENGLISH, "%d minutes", curAlarmClock.getDuration()));
+        alarmDuration.setText(String.format(Locale.ENGLISH, "%d min", curAlarmClock.getDuration()));
     }
 
     private void logicForAddingAlarmClock()
@@ -188,7 +190,7 @@ public class ChooseAlarmClockActivity extends AppCompatActivity
 
             }
 
-            acceptedIntent.putExtra(KeysForIntents.ALARM_CLOCK_INDEX, alarmClockIndex);
+            acceptedIntent.putExtra(KeysForIntents.ALARM_CLOCK_ID, alarmClockId);
             acceptedIntent.putExtra(KeysForIntents.HOURS, pickerForHours.getValue());
             acceptedIntent.putExtra(KeysForIntents.MINUTES, pickerForMinutes.getValue());
             acceptedIntent.putExtra(KeysForIntents.CHOSEN_DAYS, chosenDays);

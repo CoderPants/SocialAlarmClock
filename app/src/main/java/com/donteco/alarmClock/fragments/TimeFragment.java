@@ -38,8 +38,8 @@ public class TimeFragment extends Fragment {
     private TextView currentTimeTV;
     private TextView currentCity;
 
-    //Permission creation
-    private boolean noView = true;
+    private boolean hasCreatedOnes = true;
+
 
     @Nullable
     @Override
@@ -64,33 +64,42 @@ public class TimeFragment extends Fragment {
 
         currentCity = view.findViewById(R.id.tv_current_location);
 
-        //I need to show permission request only once
-        if(noView)
+        if(hasCreatedOnes)
         {
-            setCurrentLocation();
-            noView = false;
+            if(isLocationPermissionGranted())
+                setCurrentLocation();
+            hasCreatedOnes = false;
         }
 
-        currentCity.setOnClickListener(view1 -> setCurrentLocation());
+        currentCity.setOnClickListener(view1 ->
+        {
+            if(isLocationPermissionGranted())
+                setCurrentLocation();
+        });
     }
 
-    private void setCurrentLocation()
+    private boolean isLocationPermissionGranted()
     {
         if(activity.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED)
         {
             requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                     ConstantsForApp.LOCATION_PERMITION_REQUEST);
+            return false;
         }
-        else
-        {
-            LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
-            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-            String city = getCurrentLocation(location.getLatitude(), location.getLongitude());
+        return true;
+    }
 
-            currentCity.setText(city);
-        }
+    private void setCurrentLocation()
+    {
+        LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+        @SuppressLint("MissingPermission")
+        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+        String city = getCurrentLocation(location.getLatitude(), location.getLongitude());
+
+        currentCity.setText(city);
     }
 
     private String getCurrentLocation(double lat, double lon)
@@ -131,15 +140,7 @@ public class TimeFragment extends Fragment {
         if (requestCode == ConstantsForApp.LOCATION_PERMITION_REQUEST)
         {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            {
-                LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
-                //Just getting rid of this error
-                @SuppressLint("MissingPermission")
-                Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-                String city = getCurrentLocation(location.getLatitude(), location.getLongitude());
-                currentCity.setText(city);
-            }
+               setCurrentLocation();
             else
                 Toast.makeText(activity, "Permission denied!", Toast.LENGTH_SHORT).show();
         }
@@ -165,7 +166,12 @@ public class TimeFragment extends Fragment {
 
     //For timer resuming
     @Override
-    public void onResume() {
+    public void onResume()
+    {
+        if (activity.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED)
+            setCurrentLocation();
+
         showCurrentTime();
 
         Log.i(ConstantsForApp.LOG_TAG, "Timer resumed");
